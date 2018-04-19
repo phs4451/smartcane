@@ -43,7 +43,7 @@ class obstacleDetect():
     def main(self):
         time.sleep(1)
         pwm_vib = GPIO.PWM(self.VIB, 500)
-        pwm_vib.start(100)    
+        pwm_vib.start(100)
         
         print('To Exit, Press the CTRL+C Keys')
         print('Waiting For Sensor To Ready')
@@ -68,14 +68,14 @@ class obstacleDetect():
             while GPIO.input(self.ECHO) == 1:
                 pulse_end = time.time()
                 if ((pulse_end - pulse_start)*1000000) >= self.MAX_DURATION_TIMEOUT:
-                    print_distance(0) 
+                    print_distance(0)
                     fail = True
                     break
        
             if fail:
                 continue
 
-            pulse_duration = (pulse_end - pulse_start) * 1000000
+            pulse_duration = (pulse_end - pulse_start)*1000000
             distance = self.distanceInCm(pulse_duration)
             
             if distance <= 5 :

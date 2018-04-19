@@ -31,7 +31,7 @@ if __name__ == "__main__":
     capture.save(imgname)
     camera.close()
     
-    os.system('gpspipe -r -d -l -o /home/pi/sms/date1.txt')
+    os.system('gpspipe -r -d -l -o /home/pi/smartcane/sms/date1.txt')
     time.sleep(10)
 
     params = dict()

@@ -9,12 +9,14 @@ import signal
 #24, 25
 TRIG = 20
 ECHO = 21
-
+TRIG2 = 6
+ECHO2 = 5
 MAX_DISTANCE_CM = 300
 MAX_DURATION_TIMEOUT = (MAX_DISTANCE_CM * 2 * 29.1) #17460 # 17460us = 300cm
 
 GPIO.setmode(GPIO.BCM)
-VIB=12
+VIB=24
+VIB2=25
 GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
 GPIO.setup(VIB,GPIO.OUT)
@@ -78,13 +80,12 @@ def main():
 
         distance = distanceInCm(pulse_duration)
         
+        duty = (MAX_DISTANCE_CM-distance)/MAX_DISTANCE_CM *100
         if distance <= 5 :
           print_distance(distance)
-          duty = 100
           pwm_vib.ChangeDutyCycle(duty) 
         elif distance <=200:
           print_distance(distance)
-          duty = 80
           pwm_vib.ChangeDutyCycle(duty) 
           
         else:

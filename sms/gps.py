@@ -11,9 +11,9 @@ def convert(inputName):
    if gpgga[0] == '$GPGGA':
      lat_val = str(gpgga[2]) + str(gpgga[3])
      long_val = str(gpgga[4]) + str(gpgga[5])
-     
-     if gpgga[2] =="" or gpgga[4] == "":
-       return 1
+   else:
+     return 1 
+
       
  return "33.12N","128.11E"
  
