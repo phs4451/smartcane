@@ -8,7 +8,6 @@ from collections import OrderedDict
 import pprint
 from PIL import Image
 
-
 server_ip = 'http://210.94.185.47:30010'
 imgname='./image.jpg'
 camera = picamera.PiCamera()
@@ -24,18 +23,20 @@ def send_img(img,ip):
 	data = {'image':img}
 	Jsondata = json.dumps(data)
 	response = requests.post(ip,Jsondata)
-	#print(response.text)
-	temp = response.headers
-	#print(type(temp))
-	print(response.headers['content-type'])
-    
+	result = response.content.decode('utf-8').split('\r\n')
+	temp =json.loads(result[5])
+	if(temp['result'] is not ''):
+		print(temp['result'])
+	else:
+		print('오류 발생 - 파싱')
+
 def objRecognition(camera,rawCapture,imgname,server_ip):
     camera.capture(rawCapture,format='rgb',use_video_port=True)
     capture = Image.fromarray(rawCapture.array)
     rawCapture.truncate(0)
     capture.save(imgname)
     temp = encode_img(imgname)
-    print(temp)
+    #print(temp)
     send_img(temp,server_ip)
 
 
