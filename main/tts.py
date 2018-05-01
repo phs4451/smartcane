@@ -8,8 +8,12 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 client_id = "q0EvMJnxWgi_mML7oocc"
 client_secret = "FHas8W2HNi"
+
+def playSound(path):
+    cmd = 'omxplayer '+ path
+    os.system(cmd)
+    
 def tts_Clova(filename='tts.mp3',text='no text input'):
- 
     encText = urllib.parse.quote(text)
     data = "speaker=jinho&speed=0&text=" + encText;
     url = "https://openapi.naver.com/v1/voice/tts.bin"
@@ -23,9 +27,7 @@ def tts_Clova(filename='tts.mp3',text='no text input'):
         response_body = response.read()
         with open(filename, 'wb') as f:
             f.write(response_body)
-        cmd = 'omxplayer ' + filename
-        os.system(cmd)
+        playSound(filename)
     
     else:
         print("Error Code:" + rescode)
-
