@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import gspeech
 import time
+import string
+
 def main():
+    i=0
     gsp = gspeech.Gspeech()
     while True:
     
@@ -10,7 +13,30 @@ def main():
             break
         print(stt)
         time.sleep(0.01)
-        if ('HI' in stt):
+        
+        if(len(stt)==13):
+            sms_file = open('/home/pi/smartcane/sms/sms.py','r+')
+            lines = sms_file.readlines()
+            sms_file.close()
+            sms_file = open('/home/pi/smartcane/sms/sms.py','w+')
+            Text = "      params['to'] = '{}'\n"
+            replaceText = Text.format(stt)
+            print(lines[42])
+            print(replaceText)
+            lines[42] = replaceText
+            lines[49] = replaceText
+
+            for line in lines:
+                sms_file.write(lines[i])
+                i+=1       
+            
+            sms_file.close()
+            
+            break
+        else:
+            break
+        
+        if ('종료' in stt):
             break
 
 

@@ -197,7 +197,7 @@ def main():
             break
         print(stt)
         time.sleep(0.01)
-        if ('³¡³»ÀÚ' in stt):
+        if ('HI' in stt):
             break
 
 

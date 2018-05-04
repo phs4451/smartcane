@@ -18,6 +18,8 @@ from PIL import Image
 
 ##  @brief This sample code demonstrate how to send sms through CoolSMS Rest API PHP
 if __name__ == "__main__":
+    
+    os.system('gpspipe -r -d -l -o /home/pi/smartcane/sms/date1.txt')
     # set api key, api secret
     api_key = "NCS4QACAQPBEDUMG"
     api_secret = "WDCC4SGGH9HRBIRFV4EVZEJGL3HBUF1O"
@@ -31,21 +33,21 @@ if __name__ == "__main__":
     capture.save(imgname)
     camera.close()
     
-    os.system('gpspipe -r -d -l -o /home/pi/smartcane/sms/date1.txt')
+    
     time.sleep(10)
 
     params = dict()
     
     if gps.convert('date1.txt') == 1:
       params['type'] = 'mms' # Message type ( sms, lms, mms, ata )
-      params['to'] = '01079128566' # Recipients Number '01000000000,01000000001'
+      params['to'] = '010-4542-8562'
       params['from'] = '01064734451' # Sender number
       params['text'] = 'Location ERROR!!'# Message
       params["image"] = "../sms/image.jpg" # image for MMS. type must be set as "MMS"
     else:
       latresult,longresult = gps.convert('date1.txt')
       params['type'] = 'mms' # Message type ( sms, lms, mms, ata )
-      params['to'] = '01079128566' # Recipients Number '01000000000,01000000001'
+      params['to'] = '010-4542-8562'
       params['from'] = '01064734451' # Sender number
       params['text'] = 'http://maps.google.com/maps?z=11&t=k&q=' + latresult + longresult # Message   
       params["image"] = "../sms/image.jpg" # image for MMS. type must be set as "MMS" 
