@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*- 
 import tts
 import obstacleDetect as obsDet
+import objectRecognition as objRec
 import button
 import time
 from multiprocessing import Process
@@ -7,8 +9,17 @@ import RPi.GPIO as GPIO
 import signal
 import sys
 import os
+import picamera
+from picamera.array import PiRGBArray
+import record
 
 os.system("clear")
+
+server_ip = 'http://210.94.185.47:30010'
+imgname='./image.jpg'
+camera = picamera.PiCamera()
+rawCapture = PiRGBArray(camera)
+
 
 #GPIO Initializing
 pin_button1 = 26
@@ -40,6 +51,8 @@ except:
     print("GPIO SETUP ERROR")
 
 def main(pin_button):
+
+    
     while(True):
         count= button.main(pin_button)
         if count == 1:
@@ -53,17 +66,24 @@ def main(pin_button):
         time.sleep(0.05)
         
 try:
-    pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3]]
-    obsDet.main(pin_list)
+    #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3]]
+    #obsDet.main(pin_list)
+    #record.recording(camera)
+    
+    
     #t1= Process(target = obsDet.main, args = (pin_ultra_trg1,pin_ultra_echo1,1))
     #t2 = Process(target = obsDet.main, args = (pin_ultra_trg2,pin_ultra_echo2,2))
     #t3 = Process(target = obsDet.main, args = (pin_ultra_trg3,pin_ultra_echo3,3))
-    #t1.start()
-    #t2.start()
-    #t3.start()
-    #t1.join()
-    #t2.join()
-    #t3.join()
+    t4 = Process(target = record.recording, args = (camera,))
+    #t1.start()    
+    #t2.start()    
+    #t3.start()    
+    t4.start()
+    #t1.join()    
+    #t2.join()    
+    #t3.join()    
+    t4.join()
+    #objRec.main(camera,rawCapture,imgname,server_ip)
 finally:
     print("finalize")
     GPIO.cleanup()
