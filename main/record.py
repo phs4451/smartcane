@@ -2,36 +2,49 @@ import time
 import picamera
 import RPi.GPIO as GPIO
 import os
+import datetime as dt
 
 
 def recording(main_camera):
+      print(main_camera)
+      global flag
+      flag=2
 
       starttime = str(int(time.time()))
+      
+      filename = '/home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.h264'
+      
+
       with main_camera as camera:
              camera.start_preview()
-             camera.start_recording('/home/pi/Desktop/smartcane/blackbox/'+starttime+'.h264')   
+             camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+             camera.start_recording(filename)   
+             
+             
       
              while True:
+                camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 time.sleep(1)
-                f = open('/home/pi/Desktop/smartcane/blackbox/flag.txt','r')
-                flag = f.read()
                 print(flag)
                 currenttime = int(time.time())
                 
-                if currenttime-int(starttime) == 60:
+                if currenttime-int(starttime) == 10:
                   camera.stop_preview()
                   camera.stop_recording()
-                  f.close()
-                  os.system('MP4Box -add /home/pi/Desktop/smartcane/blackbox/'+starttime+'.h264 /home/pi/Desktop/smartcane/blackbox/'+starttime+'.mp4') 
-                  os.system('rm '+starttime+'.h264')
+                  camera.close()
+                  os.system('MP4Box -add '+filename+' /home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.mp4')
+                  os.system('rm /home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.h264')
                   break
                 
-                if flag=='0':
+                if flag==0:
                   camera.stop_preview()
                   camera.stop_recording()
-                  f.close()
-                  os.system('MP4Box -add /home/pi/Desktop/smartcane/blackbox/'+starttime+'.h264 /home/pi/Desktop/smartcane/blackbox/'+starttime+'.mp4') 
-                  os.system('rm '+starttime+'.h264')
+                  camera.close()
+                  os.system('MP4Box -add /home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.h264 /home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.mp4') 
+                  os.system('rm /home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.h264')
                   break
+              
+                
+              
                   
     

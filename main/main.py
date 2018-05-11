@@ -12,6 +12,7 @@ import os
 import picamera
 from picamera.array import PiRGBArray
 import record
+import sms
 
 os.system("clear")
 
@@ -33,7 +34,10 @@ pin_ultra_echo3 =24
 #pin_vib1 = 23
 #pin_vib2 = 25
 
+
+
 try:
+    print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
     GPIO.cleanup()
     GPIO.setup(pin_button1,GPIO.IN)
@@ -65,27 +69,59 @@ def main(pin_button):
             #obsDet.main(pin_ultra_trg1,pin_ultra_echo1,pin_vib1)
         time.sleep(0.05)
         
+        
+def test():
+    count=0
+    while(True):
+        print('test')
+        time.sleep(1)
+        count+=1
+        if count ==15:
+            record.flag=0
+            sms.main(camera)
+            break
+        
+def test1():
+    count=0
+    while(True):
+        print('test1')
+        time.sleep(1)
+        count+=1
+        if count ==15:
+            record.flag=0
+            #sms.main(camera)
+            break
+        
 try:
+    print('Programm Starts')
     #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3]]
     #obsDet.main(pin_list)
     #record.recording(camera)
-    
-    
+    #camera.vflip=True
+    #objRec.main(camera,rawCapture,imgname,server_ip)
     #t1= Process(target = obsDet.main, args = (pin_ultra_trg1,pin_ultra_echo1,1))
     #t2 = Process(target = obsDet.main, args = (pin_ultra_trg2,pin_ultra_echo2,2))
     #t3 = Process(target = obsDet.main, args = (pin_ultra_trg3,pin_ultra_echo3,3))
-    t4 = Process(target = record.recording, args = (camera,))
+    t3 = Process(target=test,args=())
+    #t5 = Process(target=test1,args=())
+    #t4 = Process(target = record.recording(camera))
+    #print('first '+str(record.flag))
     #t1.start()    
-    #t2.start()    
-    #t3.start()    
-    t4.start()
+    #t2.start()  
+    t3.start()
+    #t4.start()
+    t3.join()
+    #t4.join()
     #t1.join()    
-    #t2.join()    
-    #t3.join()    
-    t4.join()
+    #t2.join()       
+   
+    
+   
+    
     #objRec.main(camera,rawCapture,imgname,server_ip)
 finally:
     print("finalize")
+    camera.close()
     GPIO.cleanup()
 
 
