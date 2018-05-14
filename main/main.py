@@ -9,17 +9,18 @@ import RPi.GPIO as GPIO
 import signal
 import sys
 import os
-import picamera
-from picamera.array import PiRGBArray
+#import picamera
+#from picamera.array import PiRGBArray
 import record
 import sms
+
 
 os.system("clear")
 
 server_ip = 'http://210.94.185.47:30010'
 imgname='./image.jpg'
-camera = picamera.PiCamera()
-rawCapture = PiRGBArray(camera)
+#camera = picamera.PiCamera()
+#rawCapture = PiRGBArray(camera)
 
 
 #GPIO Initializing
@@ -34,9 +35,8 @@ pin_ultra_echo3 =24
 #pin_vib1 = 23
 #pin_vib2 = 25
 
-
-
 try:
+    
     print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
     GPIO.cleanup()
@@ -55,7 +55,6 @@ except:
     print("GPIO SETUP ERROR")
 
 def main(pin_button):
-
     
     while(True):
         count= button.main(pin_button)
@@ -76,9 +75,12 @@ def test():
         print('test')
         time.sleep(1)
         count+=1
-        if count ==15:
-            record.flag=0
-            sms.main(camera)
+        if count ==10:
+            f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
+            f.write('0')
+            f.close()
+            time.sleep(2)
+            sms.main()
             break
         
 def test1():
@@ -87,12 +89,16 @@ def test1():
         print('test1')
         time.sleep(1)
         count+=1
-        if count ==15:
-            record.flag=0
-            #sms.main(camera)
+        if count ==70:
+            f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
+            f.write('0')
+            f.close()
+            time.sleep(2)
+            sms.main()
             break
         
 try:
+    
     print('Programm Starts')
     #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3]]
     #obsDet.main(pin_list)
@@ -103,25 +109,24 @@ try:
     #t2 = Process(target = obsDet.main, args = (pin_ultra_trg2,pin_ultra_echo2,2))
     #t3 = Process(target = obsDet.main, args = (pin_ultra_trg3,pin_ultra_echo3,3))
     t3 = Process(target=test,args=())
-    #t5 = Process(target=test1,args=())
-    #t4 = Process(target = record.recording(camera))
+    t5 = Process(target=test1,args=())
+    t4 = Process(target = record.recording,args=())
     #print('first '+str(record.flag))
     #t1.start()    
     #t2.start()  
     t3.start()
-    #t4.start()
+    t4.start()
+    t5.start()
     t3.join()
-    #t4.join()
+    t4.join()
+    t5.join()
     #t1.join()    
-    #t2.join()       
-   
+    #t2.join()
     
-   
-    
+
     #objRec.main(camera,rawCapture,imgname,server_ip)
 finally:
     print("finalize")
-    camera.close()
     GPIO.cleanup()
 
 
