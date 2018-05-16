@@ -15,10 +15,10 @@ def main():
         time.sleep(0.01)
         
         if(len(stt)==13):
-            sms_file = open('/home/pi/smartcane/sms/sms.py','r+')
+            sms_file = open('/home/pi/Desktop/smartcane/main/sms.py','r+')
             lines = sms_file.readlines()
             sms_file.close()
-            sms_file = open('/home/pi/smartcane/sms/sms.py','w+')
+            sms_file = open('/home/pi/Desktop/smartcane/main/sms.py','w+')
             Text = "      params['to'] = '{}'\n"
             replaceText = Text.format(stt)
             print(lines[42])

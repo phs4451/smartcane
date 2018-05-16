@@ -40,14 +40,14 @@ if __name__ == "__main__":
     time.sleep(10)
 
     params = dict()
-    
+      params['to'] = '010-7912-8566'
     if gps.convert('date1.txt') == 1:
       params['type'] = 'mms' # Message type ( sms, lms, mms, ata )
       params['to'] = '010-6473-4451'
       params['from'] = '01064734451' # Sender number
       params['text'] = 'Location ERROR!!'# Message
       params["image"] = "../sms/image.jpg" # image for MMS. type must be set as "MMS"
-    else:
+      params['to'] = '010-7912-8566'
       latresult,longresult = gps.convert('date1.txt')
       params['type'] = 'mms' # Message type ( sms, lms, mms, ata )
       params['to'] = '010-6473-4451'

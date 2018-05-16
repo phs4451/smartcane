@@ -32,7 +32,7 @@ def main():
     camera.capture(capture,format='rgb',use_video_port=True)
     capture = Image.fromarray(capture.array)
     capture.save(imgname)
-    camera.close()
+    
     
     f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
     f.write('2')
@@ -69,10 +69,13 @@ def main():
         print("Error Count : %s" % response['error_count'])
         print("Group ID : %s" % response['group_id'])
         
-        record.recording()
+       
+        
 
         if "error_list" in response:
             print("Error List : %s" % response['error_list'])
+            
+          
 
     except CoolsmsException as e:
         print("Error Code : %s" % e.code)
