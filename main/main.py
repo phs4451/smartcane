@@ -13,8 +13,10 @@ import os
 #from picamera.array import PiRGBArray
 import record
 import sms
+import flag
 
 
+os.system("sudo rdate -s time.bora.net")
 os.system("clear")
 
 server_ip = 'http://210.94.185.47:30010'
@@ -36,7 +38,7 @@ pin_ultra_echo3 =24
 #pin_vib2 = 25
 
 try:
-    
+    os.system("omxplayer /home/pi/Desktop/smartcane/voicefile/start.MP3")
     print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
     GPIO.cleanup()
@@ -61,11 +63,12 @@ def main(pin_button):
         count= button.main(pin_button)
         if count == 1:
             print(str(pin_button)+" once")
-            f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
-            f.write('0')
-            f.close()
+            flag.setFlag(0)
+            #f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
+            #f.write('0')
+            #f.close()
             time.sleep(2)
-            sms.main()
+            #sms.main()
             
         elif count == 2:
             print(str(pin_button)+" twice")
@@ -78,6 +81,7 @@ def main(pin_button):
         
 def test():
     count=0
+    
     while(True):
         print('test')
         time.sleep(1)
@@ -89,12 +93,6 @@ def test():
             time.sleep(2)
             sms.main()
         
-        if count == 18:
-            f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
-            f.write('0')
-            f.close()
-            time.sleep(2)
-            sms.main()
             
         
 def test1():

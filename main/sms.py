@@ -13,6 +13,8 @@ from collections import OrderedDict
 import pprint
 from PIL import Image
 import record
+import flag
+
 
 
 ##  @brief This sample code demonstrate how to send sms through CoolSMS Rest API PHP
@@ -22,7 +24,7 @@ def main():
     os.system('gpspipe -r -d -l -o /home/pi/smartcane/sms/date1.txt')
     # set api key, api secret
     api_key = "NCS4QACAQPBEDUMG"
-    api_secret = "WDCC4SGGH9HRBIRFV4EVZEJGL3HBUF1O"
+    api_secret = "XBGIKE2OTK0SJEDL86QTWXXQXYUMHBNU"
 
     
     imgname='./image.jpg'
@@ -32,32 +34,30 @@ def main():
     camera.capture(capture,format='rgb',use_video_port=True)
     capture = Image.fromarray(capture.array)
     capture.save(imgname)
+    camera.close()
     
-    
-    f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
-    f.write('2')
-    f.close()
+    flag.initFlag()
+    #f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
+    #f.write('1')
+    #f.close()
     
     time.sleep(10)
-
     params = dict()
     
     if gps.convert('date1.txt') == 1:
-      params['type'] = 'sms' # Message type ( sms, lms, mms, ata )
-      params['to'] = '010-6473-4451'
-      params['from'] = '01064734451' # Sender number
-      params['text'] = 'Location ERROR!!'# Message
-      #params["image"] = "../sms/image.jpg" # image for MMS. type must be set as "MMS"
+      params['type'] = 'mms' # Message type ( sms, lms, mms, ata )
+      params['to'] = '010-8191-9585'
+      params['from'] = '01064734451'
+      params['text'] = 'Location ERROR!'
+      params["image"] = imgname # image for MMS. type must be set as "MMS"
     else:
       latresult,longresult = gps.convert('date1.txt')
-      params['type'] = 'sms' # Message type ( sms, lms, mms, ata )
-      params['to'] = '010-6473-4451'
-      params['from'] = '01064734451' # Sender number
+      params['type'] = 'mms' # Message type ( sms, lms, mms, ata )
+      params['to'] = '010-8191-9585'
+      params['from'] = '01064734451'
       params['text'] = 'http://maps.google.com/maps?z=11&t=k&q=' + latresult + longresult # Message   
-      #params["image"] = "../sms/image.jpg" # image for MMS. type must be set as "MMS" 
+      params["image"] = imgname # image for MMS. type must be set as "MMS" 
     ## 4 params(to, from, type, text) are mandat?ory. must be filled
-    
-    
     
     cool = Message(api_key, api_secret)
     
@@ -70,8 +70,6 @@ def main():
         print("Group ID : %s" % response['group_id'])
         
        
-        
-
         if "error_list" in response:
             print("Error List : %s" % response['error_list'])
             

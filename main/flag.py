@@ -1,6 +1,6 @@
 import os
 
-flag_file = "/home/pi/Desktop/smartcane/blackbox/flag.txt"
+flag_name = "/home/pi/Desktop/smartcane/blackbox/flag.txt"
 
 def initFlag(filename=flag_name):
     if os.path.exists(filename):

@@ -1,9 +1,21 @@
-
+import numpy as np
 import cv2
+img1 = cv2.imread('111.jpg',0)
+img2 = cv2.imread('2.png',0)
 
-img1 = cv2.imread('test1.jpg')
-img2= cv2.cvtColor(img1,cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(img2,(3,3),0)
-result_edge2 = cv2.Canny(blur, 100, 200)
-cv2.imwrite("edge.png", result_edge2)
+detector = cv2.xfeatures2d.SURF_create()
 
+kp1, des1 = detector.detectAndCompute(img1, None)
+kp2, des2 = detector.detectAndCompute(img2, None)
+
+bf = cv2.BFMatcher()
+matches = bf.knnMatch(des1,des2, k=2)
+
+good = []
+match_param = 0.7
+for m,n in matches:
+    if m.distance < match_param*n.distance:
+        good.append([m])
+
+img3 = cv2.drawMatchesKnn(img1,kp1,img2,kp2,good, None,flags=2)
+cv2.imwrite("result.png", img3)

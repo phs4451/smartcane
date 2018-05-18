@@ -24,7 +24,6 @@ server_ip = 'http://210.94.185.47:30010'
 imgname='./image.jpg'
 camera = picamera.PiCamera()
 rawCapture = PiRGBArray(camera)
-#flag_file = "/home/pi/Desktop/smartcane/blackbox/flag.txt"
 
 ##########################GPIO SETUP#################################
 #GPIO Initializing
@@ -40,7 +39,6 @@ pin_ultra_echo3 =24
 #pin_vib2 = 25
 
 try:
-    
     print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
     GPIO.cleanup()
@@ -58,31 +56,8 @@ try:
 except:
     print("GPIO SETUP ERROR")
 ##########################GPIO SETUP END#################################
+
 flag.initFlag()
-
-'''
-def setFlag(flag,filename=flag_name):
-    if os.path.exists(filename):
-        try:
-            f = open(flag_name,"w")
-            f.write(str(flag))
-            f.close()
-        except:
-            print("setflag failed")
-    else:
-        print("no flag file exists")
-
-def getFlag(filename=flag_name):
-    if os.path.exists(filename):
-        try:
-            f = open(flag_name,"r")
-            flag = f.readline()
-            return flag
-        except:
-            print("getflag failed")
-    else:
-        print("no flag file exists")
-'''
 
 def main(pin_button,q):
     while(True):
@@ -103,41 +78,15 @@ def main(pin_button,q):
 
 def cancel(pin_button): #cancel button's pin num is 26.
     while(True):
-	print('cancel listening...')
+	printt('cancel listening...')
 	count = button.main(pin_button)
 	if count == 1:
 		#kill process
+            target = q.get()
+            target.terminate()
 	elif count>=2:
 		#change phone num in sos.
 
-'''
-def test():
-    count=0
-    while(True):
-        print('test')
-        time.sleep(1)
-        count+=1
-        if count ==10:
-            f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
-            f.write('0')
-            f.close()
-            time.sleep(2)
-            sms.main()
-            break
-def test1():
-    count=0
-    while(True):
-        print('test1')
-        time.sleep(1)
-        count+=1
-        if count ==70:
-            f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
-            f.write('0')
-            f.close()
-            time.sleep(2)
-            sms.main()
-            break
-'''
 try:
     global t4
     print('Programm Starts')
@@ -164,8 +113,6 @@ try:
     #t5.join()
     #t1.join()    
     #t2.join()
-    
-
     #objRec.main(camera,rawCapture,imgname,server_ip)
 finally:
     print("finalize")

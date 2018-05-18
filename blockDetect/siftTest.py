@@ -5,7 +5,7 @@ from wand.image import Image
 
 detector = cv2.xfeatures2d.SURF_create()
 
-oldfilename = "test1.jpg"
+oldfilename = "2.png"
 row = 3
 col = 3
 
@@ -48,7 +48,7 @@ for i in range(0, row):
                 
                 # edge processing
           
-                img3 = cv2.imread('edge_result1.png')#cv2.imread('target1.jpg')   #cv2.imread('edge_result1.png',0) # template
+                img3 = cv2.imread('1.jpg')#cv2.imread('target1.jpg')   #cv2.imread('edge_result1.png',0) # template
                 img4 = cv2.imread('edge_result2.png') #cutimg[i][j]  #cv2.imread('edge_result2.png')
                 
                 kp1, des1 = detector.detectAndCompute(img3, None)
