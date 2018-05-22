@@ -25,21 +25,17 @@ def main():
     # set api key, api secret
     api_key = "NCS4QACAQPBEDUMG"
     api_secret = "XBGIKE2OTK0SJEDL86QTWXXQXYUMHBNU"
-
     
     imgname='./image.jpg'
     camera = picamera.PiCamera()
     capture = PiRGBArray(camera)
-    
     camera.capture(capture,format='rgb',use_video_port=True)
     capture = Image.fromarray(capture.array)
     capture.save(imgname)
     camera.close()
     
     flag.initFlag()
-    #f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
-    #f.write('1')
-    #f.close()
+    
     
     time.sleep(10)
     params = dict()

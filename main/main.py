@@ -42,6 +42,7 @@ try:
     print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
     GPIO.cleanup()
+    print("treid gpio cleanup, nothing to clean")
     GPIO.setup(pin_button1,GPIO.IN)
     GPIO.setup(pin_button2,GPIO.IN)
     GPIO.setup(pin_ultra_trg1,GPIO.OUT)
@@ -50,24 +51,20 @@ try:
     GPIO.setup(pin_ultra_echo2,GPIO.IN)
     GPIO.setup(pin_ultra_trg3,GPIO.OUT)
     GPIO.setup(pin_ultra_echo3,GPIO.IN)
-    #GPIO.setup(pin_vib1,GPIO.OUT)
-    #GPIO.setup(pin_vib2,GPIO.OUT)
+    GPIO.setup(pin_vib1,GPIO.OUT)
+    GPIO.setup(pin_vib2,GPIO.OUT)
     print("GPIO SETUP Complete")
 except:
     print("GPIO SETUP ERROR")
 
 def main(pin_button):
-    
     while(True):
         print('button')
         count= button.main(pin_button)
         if count == 1:
             print(str(pin_button)+" once")
-            flag.setFlag(0)
-            #f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
-            #f.write('0')
-            #f.close()
-            time.sleep(2)
+            #flag.setFlag(0)
+            #time.sleep(2)
             #sms.main()
             
         elif count == 2:
@@ -78,10 +75,9 @@ def main(pin_button):
             #obsDet.main(pin_ultra_trg1,pin_ultra_echo1,pin_vib1)
         time.sleep(0.05)
         
-        
+     
 def test():
     count=0
-    
     while(True):
         print('test')
         time.sleep(1)
@@ -94,20 +90,7 @@ def test():
             sms.main()
         
             
-        
-def test1():
-    count=0
-    while(True):
-        print('test1')
-        time.sleep(1)
-        count+=1
-        if count ==70:
-            f = open("/home/pi/Desktop/smartcane/blackbox/flag.txt",'w')
-            f.write('0')
-            f.close()
-            time.sleep(2)
-            sms.main()
-            break
+    
         
 try:
     print('Programm Starts')
@@ -119,10 +102,11 @@ try:
     #t1= Process(target = obsDet.main, args = (pin_ultra_trg1,pin_ultra_echo1,1))
     #t2 = Process(target = obsDet.main, args = (pin_ultra_trg2,pin_ultra_echo2,2))
     #t3 = Process(target = obsDet.main, args = (pin_ultra_trg3,pin_ultra_echo3,3))
-    t3 = Process(target=test,args=())
+    #t3 = Process(target=main,args=(26,))
     #t5 = Process(target=test1,args=())
-    #t3 = Process(target = main, args=(pin_button1,))
-    t4 = Process(target = record.recording,args=())
+    t3 = Process(target = main, args=(pin_button1,))
+    t4 = Process(target = main, args=(pin_button2,))
+    #t4 = Process(target = record.recording,args=())
     #print('first '+str(record.flag))
     #t1.start()    
     #t2.start()  
