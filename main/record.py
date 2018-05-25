@@ -9,6 +9,7 @@ import flag
 def recording():
  
       with picamera.PiCamera() as camera:
+             camera.vflip=True
              #filename = '/home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.h264'
              #camera.start_preview()
              #camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -21,7 +22,7 @@ def recording():
                 time.sleep(1)
                 currenttime = int(time.time())
 
-                if currenttime-int(realstarttime) == 25:
+                if currenttime-int(realstarttime) == 500:
                   camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                   camera.stop_preview()
                   camera.stop_recording()

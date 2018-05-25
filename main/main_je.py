@@ -34,11 +34,11 @@ pin_ultra_trg2 = 5
 pin_ultra_echo2 = 6
 pin_ultra_trg3 =23
 pin_ultra_echo3 =24
-#pin_vib1 = 23
-#pin_vib2 = 25
+pin_vib1 = 23
+pin_vib2 = 25
 
 try:
-    os.system("omxplayer /home/pi/Desktop/smartcane/voicefile/start.MP3")
+    #os.system("omxplayer /home/pi/Desktop/smartcane/voicefile/start.MP3")
     print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
     GPIO.cleanup()
@@ -97,7 +97,7 @@ def test():
         
 try:
     print('Programm Starts')
-    pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3]]
+    pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2]]
     obsDet.main(pin_list)
     #record.recording(camera)
     #camera.vflip=True

@@ -9,11 +9,12 @@ import RPi.GPIO as GPIO
 import signal
 import sys
 import os
-#import picamera
-#from picamera.array import PiRGBArray
+import picamera
+from picamera.array import PiRGBArray
 import record
 import sms
 import flag
+import blockdetect
 
 
 os.system("sudo rdate -s time.bora.net")
@@ -38,21 +39,21 @@ pin_ultra_echo3 =24
 #pin_vib2 = 25
 
 try:
-    os.system("omxplayer /home/pi/Desktop/smartcane/voicefile/start.MP3")
+    #os.system("mplayer /home/pi/Desktop/smartcane/voicefile/start.MP3")
     print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
     GPIO.cleanup()
     print("treid gpio cleanup, nothing to clean")
     GPIO.setup(pin_button1,GPIO.IN)
-    GPIO.setup(pin_button2,GPIO.IN)
-    GPIO.setup(pin_ultra_trg1,GPIO.OUT)
-    GPIO.setup(pin_ultra_echo1,GPIO.IN)
-    GPIO.setup(pin_ultra_trg2,GPIO.OUT)
-    GPIO.setup(pin_ultra_echo2,GPIO.IN)
-    GPIO.setup(pin_ultra_trg3,GPIO.OUT)
-    GPIO.setup(pin_ultra_echo3,GPIO.IN)
-    GPIO.setup(pin_vib1,GPIO.OUT)
-    GPIO.setup(pin_vib2,GPIO.OUT)
+    #GPIO.setup(pin_button2,GPIO.IN)
+    #GPIO.setup(pin_ultra_trg1,GPIO.OUT)
+    #GPIO.setup(pin_ultra_echo1,GPIO.IN)
+    #GPIO.setup(pin_ultra_trg2,GPIO.OUT)
+    #GPIO.setup(pin_ultra_echo2,GPIO.IN)
+    #GPIO.setup(pin_ultra_trg3,GPIO.OUT)
+    #GPIO.setup(pin_ultra_echo3,GPIO.IN)
+    #GPIO.setup(pin_vib1,GPIO.OUT)
+    #GPIO.setup(pin_vib2,GPIO.OUT)
     print("GPIO SETUP Complete")
 except:
     print("GPIO SETUP ERROR")
@@ -63,6 +64,13 @@ def main(pin_button):
         count= button.main(pin_button)
         if count == 1:
             print(str(pin_button)+" once")
+            #camera = picamera.PiCamera()
+            #camera.vflip = True
+            #camera.hflip=True
+            #rawCapture = PiRGBArray(camera)
+            #objRec.main(camera,rawCapture,imgname,server_ip)
+            #camera.close()
+            blockdetect.main()
             #flag.setFlag(0)
             #time.sleep(2)
             #sms.main()
@@ -105,16 +113,17 @@ try:
     #t3 = Process(target=main,args=(26,))
     #t5 = Process(target=test1,args=())
     t3 = Process(target = main, args=(pin_button1,))
-    t4 = Process(target = main, args=(pin_button2,))
-    #t4 = Process(target = record.recording,args=())
+    #t4 = Process(target = main, args=(pin_button2,))
+    #t3 = Process(target = record.recording,args=())
+
     #print('first '+str(record.flag))
     #t1.start()    
     #t2.start()  
     t3.start()
-    t4.start()
+    #t4.start()
     #t5.start()
     t3.join()
-    t4.join()
+    #t4.join()
     #t5.join()
     #t1.join()    
     #t2.join()
