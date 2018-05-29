@@ -25,7 +25,16 @@ def send_img(img,ip):
 	else:
 		print('오류 발생 - 파싱')
 
-def main(camera,rawCapture,imgname,server_ip):
+def main():
+    
+    server_ip = 'http://210.94.185.47:30010'
+    imgname='./image.jpg'
+    
+    camera = picamera.PiCamera()
+    camera.vflip=True
+    camera.hflip=True
+    capture = PiRGBArray(camera)
+    
     camera.capture(rawCapture,format='rgb',use_video_port=True)
     capture = Image.fromarray(rawCapture.array)
     rawCapture.truncate(0)

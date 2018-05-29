@@ -6,8 +6,13 @@ import picamera
 from picamera.array import PiRGBArray
 from PIL import Image
 import flag
+import os
 
-target = "blockimage.jpg"
+dirname = './block_result'
+if not os.path.exists(dirname):
+    os.makedirs(dirname)
+
+target = os.path.join(dirname,"blockimage.jpg")
 row = 1
 col = 1
 
@@ -58,13 +63,13 @@ def cutImage():
               
               with image[left:right, top:bottom] as newimage:
                 print("new : {0} , {1}".format(newimage.format, newimage.size))
-                newimage.save(filename="{0}x{1}_{2}".format(i, j, "cutresult.jpg"))
+                newimage.save(filename=os.path.join(dirname,"{0}x{1}_{2}".format(i, j, "cutresult.jpg")))
 
 
 #main
 def main():
     
-    imgname='./blockimage.jpg'
+    imgname=os.path.join(dirname,'blockimage.jpg')
     camera = picamera.PiCamera()
     camera.vflip=True
     camera.hflip=True
@@ -87,10 +92,11 @@ def main():
             detect_index[i][j] = 0
             
             # 가우시안 필터 처리
-            cutimg[i][j]  = cv2.imread(filename="{0}x{1}_{2}".format(i, j, "cutresult.jpg"))
+            cutimg[i][j]  = cv2.imread(os.path.join(dirname,"{0}x{1}_{2}".format(i, j, "cutresult.jpg")))
             blur = cv2.GaussianBlur(cutimg[i][j],(3,3),0)
-            cv2.imwrite("blur.jpg",blur)
-            frame = cv2.imread('blur.jpg')
+            blurfilename = os.path.join(dirname,'blur.jpg')
+            cv2.imwrite(blurfilename,blur)
+            frame = cv2.imread(blurfilename)
             
             #CLAHE
             #image_lab = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
@@ -120,11 +126,11 @@ def main():
             mask = cv2.inRange(img_hsv, lower_yellow, upper_yellow)    
 
             # Bitwise-AND mask and original image  
-            img_result = cv2.bitwise_and(frame,frame, mask= mask)  
+            img_result = cv2.bitwise_and(frame,frame, mask= mask)
+            img_yellow_name = os.path.join(dirname,'img_yellow.jpg')
+            cv2.imwrite( img_yellow_name, img_result ) 
 
-            cv2.imwrite( 'img_result123.jpg', img_result ) 
-
-            img = cv2.imread('img_result123.jpg')
+            img = cv2.imread(img_yellow_name)
             imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             #Thresholding
@@ -136,11 +142,14 @@ def main():
 
             for con in contours:
                 detect(con,img,i,j)
-                
-            cv2.imwrite( str(i) +'x'+str( j) +'_detect.jpg', img)
             
-    temp =cv2.imread('./0x0_cutresult.jpg')
-    temp2 = cv2.imread('./0x0_detect.jpg')
+            img_detect_name = os.path.join(dirname,str(i) +'x'+str( j) +'_detect.jpg')
+            cv2.imwrite(img_detect_name, img)
+    
+    img1_name = os.path.join(dirname,'0x0_cutresult.jpg')
+    img2_name = os.path.join(dirname,'0x0_detect.jpg')
+    temp =cv2.imread(img1_name)
+    temp2 =cv2.imread(img2_name)
     cv2.imshow('original',temp)
     cv2.imshow('detect',temp2)
     cv2.imshow('thr',thr)
