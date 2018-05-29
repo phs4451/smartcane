@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import RPi.GPIO as GPIO      # gpio ?ºÏù¥Î∏åÎü¨Î¶?from time import sleep       # sleep ?ºÏù¥Î∏åÎü¨Î¶?
+import RPi.GPIO as GPIO      
 #from time import sleep
 import time
 '''
 VIB1 = 23
 VIB2 = 25
 
-GPIO.setmode(GPIO.BCM)      # GPIO Î™®Îìú ?ãÌåÖ
+GPIO.setmode(GPIO.BCM)    
 GPIO.setup(VIB1,GPIO.OUT)
 GPIO.setup(VIB2,GPIO.OUT)
 '''
@@ -115,9 +115,12 @@ def vibrate (Left,Right,Type,pin_vib1, pin_vib2):
                     break
 
 def vibrate2(index,pin_vib1, pin_vib2):
-    setup(pin_vib1, pin_vib2)
-    starttime = time.time():
-    
+    #setup(pin_vib1, pin_vib2)
+    pwm_vib1 = GPIO.PWM(pin_vib1, 500)
+    pwm_vib1.start(0)
+    pwm_vib2 = GPIO.PWM(pin_vib2, 500)
+    pwm_vib2.start(0)
+    starttime = time.time()
     High = 100
     timeterm = 0.5
     
@@ -125,22 +128,17 @@ def vibrate2(index,pin_vib1, pin_vib2):
         if index ==1:
             pwm_vib1.ChangeDutyCycle(High)
             time.sleep(timeterm)
-            clean_GPIO()
             break
         elif index ==2:
             pwm_vib1.ChangeDutyCycle(High)
             pwm_vib2.ChangeDutyCycle(High)
             time.sleep(timeterm)
-            clean_GPIO()
             break
         elif index ==3:
             pwm_vib2.ChangeDutyCycle(High)
             time.sleep(timeterm)
-            clean_GPIO()
             break
-        else:
-            clean_GPIO()
-            break
+
 '''
 try:
     starttime = time.time()
@@ -161,7 +159,7 @@ try:
         if end_key == "end": 
           break
              
-except KeyboardInterrupt:      # CTRL-CÎ•??ÑÎ•¥Î©?Î∞úÏÉù
+except KeyboardInterrupt:      
         GPIO.cleanup()
 '''        
         

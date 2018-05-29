@@ -33,7 +33,7 @@ def main():
     capture = Image.fromarray(capture.array)
     capture.save(imgname)
     camera.close()
-    
+
     flag.initFlag()
     
     
@@ -64,7 +64,7 @@ def main():
         print("Success Count : %s" % response['success_count'])
         print("Error Count : %s" % response['error_count'])
         print("Group ID : %s" % response['group_id'])
-        
+        os.system("mplayer /home/pi/Desktop/smartcane/voicefile/mms.MP3")
        
         if "error_list" in response:
             print("Error List : %s" % response['error_list'])

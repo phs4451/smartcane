@@ -4,7 +4,7 @@ import time
 import sys
 import signal
 import numpy as np
-#import vibrate_je
+import vibrate_je
 
 MAX_DISTANCE_CM = 300
 MAX_DURATION_TIMEOUT = (MAX_DISTANCE_CM * 2 * 29.1) #17460 # 17460us = 300cm
@@ -94,8 +94,8 @@ def getDistance(pin_ultra_trg,pin_ultra_echo,pin_vib1, pin_vib2, index):
             #dist_check[index-1].append(distance)
             #warning = distCheck()
             #print(warning)
-            #if distance <= 50:
-                #vibrate_je.vibrate2(index,pin_vib1, pin_vib2)
+            if distance <= 50:
+                vibrate_je.vibrate2(index,pin_vib1, pin_vib2)
             return distance
         else:
             return MAX_DISTANCE_CM

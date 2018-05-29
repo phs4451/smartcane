@@ -110,7 +110,7 @@ try:
     #t1= Process(target = obsDet.main, args = (pin_ultra_trg1,pin_ultra_echo1,1))
     #t2 = Process(target = obsDet.main, args = (pin_ultra_trg2,pin_ultra_echo2,2))
     #t3 = Process(target = obsDet.main, args = (pin_ultra_trg3,pin_ultra_echo3,3))
-    #t3 = Process(target=main,args=(26,))
+    #t3 = Process(target=blockdetect.main,args=())
     #t5 = Process(target=test1,args=())
     t3 = Process(target = main, args=(pin_button1,))
     #t4 = Process(target = main, args=(pin_button2,))

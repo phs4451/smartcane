@@ -34,7 +34,7 @@ pin_ultra_trg2 = 5
 pin_ultra_echo2 = 6
 pin_ultra_trg3 =23
 pin_ultra_echo3 =24
-pin_vib1 = 23
+pin_vib1 = 12
 pin_vib2 = 25
 
 try:
