@@ -13,10 +13,12 @@ if not os.path.exists(dirname):
     os.makedirs(dirname)
 
 target = os.path.join(dirname,"blockimage.jpg")
-row = 1
-col = 1
+
+row = 3
+col = 3
 
 detect_index = [[0 for i in range(row)] for j in range(col)]
+
 #def adjust_gamma(image, gamma=1.0):
 
    #invGamma = 1.0 / gamma
@@ -26,7 +28,7 @@ detect_index = [[0 for i in range(row)] for j in range(col)]
    #return cv2.LUT(image, table)
 
 def detect(c,img,i,j):
-        
+    
         shape = "unidentified"
         peri = cv2.arcLength(c,True)
         approx = cv2.approxPolyDP(c, 0.02*peri, True) # smooth edge
@@ -81,11 +83,11 @@ def main():
     camera.close()
     
     #flag.initFlag()
-    
     cutImage()
 
     cutimg = [[0 for i in range(row)] for j in range(col)]
-
+    
+    
     for i in range(0, row): 
         for j in range(0, col): 
             
@@ -121,7 +123,7 @@ def main():
 
             #노란색 범위 지정
             lower_yellow = np.array([10,100,30])  
-            upper_yellow = np.array([25,255,255])  
+            upper_yellow = np.array([30,255,255])  
 
             mask = cv2.inRange(img_hsv, lower_yellow, upper_yellow)    
 

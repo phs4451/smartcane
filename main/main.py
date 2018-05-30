@@ -33,10 +33,9 @@ pin_vib2 = 25
 
 try:
     sound.start()
+    flag.initFlag()
     print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
-    GPIO.cleanup()
-    print("treid gpio cleanup, nothing to clean")
     GPIO.setup(pin_button1,GPIO.IN)
     #GPIO.setup(pin_button2,GPIO.IN)
     #GPIO.setup(pin_ultra_trg1,GPIO.OUT)
@@ -57,11 +56,17 @@ def main(pin_button):
         count= button.main(pin_button)
         if count == 1:
             print(str(pin_button)+" once")
-            blockdetect.main()
-
+            flag.setflag(0)
+            sound.camera()
+            objRec.main()
+            flag.setflag(1)
         elif count == 2:
             print(str(pin_button)+" twice")
-            #obsDet.main(pin_ultra_trg2,pin_ultra_echo2,pin_vib2)
+            flag.setflag(0)
+            sound.camera()
+            blockdetect.main()
+            flag.setflag(1)
+            
         elif count >= 3:
             print(str(pin_button)+" long_press")
             #obsDet.main(pin_ultra_trg1,pin_ultra_echo1,pin_vib1)
@@ -71,32 +76,19 @@ try:
     print('Programm Starts')
     #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3]]
     #obsDet.main(pin_list)
-    #record.recording(camera)
-    #camera.vflip=True
     #objRec.main(camera,rawCapture,imgname,server_ip)
     #t1= Process(target = obsDet.main, args = (pin_ultra_trg1,pin_ultra_echo1,1))
     #t2 = Process(target = obsDet.main, args = (pin_ultra_trg2,pin_ultra_echo2,2))
     #t3 = Process(target = obsDet.main, args = (pin_ultra_trg3,pin_ultra_echo3,3))
     #t3 = Process(target=blockdetect.main,args=())
     #t5 = Process(target=test1,args=())
-    t3 = Process(target = main, args=(pin_button1,))
+    main(pin_button1)
+    #t3 = Process(target = main, args=(pin_button1,))
     #t4 = Process(target = main, args=(pin_button2,))
     #t3 = Process(target = record.recording,args=())
-
-    #print('first '+str(record.flag))
-    #t1.start()    
-    #t2.start()  
-    t3.start()
-    #t4.start()
-    #t5.start()
-    t3.join()
-    #t4.join()
-    #t5.join()
-    #t1.join()    
-    #t2.join()
-    
     #objRec.main()
 finally:
+    sound.finish()
     print("Cleaning up GPIO...")
     GPIO.cleanup()
 

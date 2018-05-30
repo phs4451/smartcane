@@ -1,41 +1,30 @@
 import os
 import pygame
-os.system('pacmd set-default-sink 1')
+#os.system('pacmd set-default-sink 2')
 
-
+mixer = pygame.mixer
+mixer.init()
 
 def start():
-    pygame.mixer.init()
-    pygame.mixer.music.load('voicefile/start.mp3')
-    pygame.mixer.music.play()
-    pygame.quit()
+    mixer.music.load('voicefile/start.mp3')
+    mixer.music.play()   
     
 def camera():
-    pygame.mixer.init()
-    pygame.mixer.music.load('voicefile/camera.wav')
-    pygame.mixer.music.play()
-    pygame.quit()
+    mixer.music.load('voicefile/camera.wav')
+    mixer.music.play()
     
 def finish():
-    pygame.mixer.init()
-    pygame.mixer.music.load('voicefile/finish.mp3')
-    pygame.mixer.music.play()
-    pygame.quit()
+    mixer.music.load('voicefile/finish.mp3')
+    mixer.music.play()
     
-def mms():
-    pygame.mixer.init()
-    pygame.mixer.music.load('voicefile/mms.mp3')
-    pygame.mixer.music.play()
-    pygame.quit()
+def mms():    
+    mixer.music.load('voicefile/mms.mp3')
+    mixer.music.play()
 
 def caution():
-    pygame.mixer.init()
-    pygame.mixer.music.load('voicefile/caution.wav')
-    pygame.mixer.music.play()
-    pygame.quit()
+    mixer.music.load('voicefile/caution.wav')
+    mixer.music.play()
     
 def click():
-    pygame.mixer.init()
-    pygame.mixer.music.load('voicefile/click.wav')
-    pygame.mixer.music.play()
-    pygame.quit()
+    mixer.music.load('voicefile/click.wav')
+    mixer.music.play()

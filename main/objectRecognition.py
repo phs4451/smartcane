@@ -33,7 +33,7 @@ def main():
     camera = picamera.PiCamera()
     camera.vflip=True
     camera.hflip=True
-    capture = PiRGBArray(camera)
+    rawCapture = PiRGBArray(camera)
     
     camera.capture(rawCapture,format='rgb',use_video_port=True)
     capture = Image.fromarray(rawCapture.array)
@@ -42,6 +42,7 @@ def main():
     temp = encode_img(imgname)
     #print(temp)
     send_img(temp,server_ip)
+    camera.close()
 
 
 

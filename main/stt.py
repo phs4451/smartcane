@@ -7,7 +7,6 @@ def main():
     i=0
     gsp = gspeech.Gspeech()
     while True:
-    
         stt = gsp.getText()
         if stt is None:
             break
