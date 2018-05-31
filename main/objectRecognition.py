@@ -8,6 +8,7 @@ import json
 from collections import OrderedDict
 import pprint
 from PIL import Image
+import os
 
 def encode_img(img):
 	with open(img,'rb') as imgfile:
@@ -26,15 +27,13 @@ def send_img(img,ip):
 		print('오류 발생 - 파싱')
 
 def main():
-    
     server_ip = 'http://210.94.185.47:30010'
     imgname='./image.jpg'
-    
     camera = picamera.PiCamera()
     camera.vflip=True
     camera.hflip=True
     rawCapture = PiRGBArray(camera)
-    
+    os.system("mplayer voicefile/camera.mp3")
     camera.capture(rawCapture,format='rgb',use_video_port=True)
     capture = Image.fromarray(rawCapture.array)
     rawCapture.truncate(0)

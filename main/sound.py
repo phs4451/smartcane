@@ -10,7 +10,7 @@ def start():
     mixer.music.play()   
     
 def camera():
-    mixer.music.load('voicefile/camera.wav')
+    mixer.music.load('voicefile/camera2.mp3')
     mixer.music.play()
     
 def finish():

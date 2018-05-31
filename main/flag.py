@@ -12,7 +12,7 @@ def initFlag(filename=flag_name):
 def setFlag(flag,filename=flag_name):
     if os.path.exists(filename):
         try:
-            f = open(filename,"a")
+            f = open(filename,"w")
             f.write(str(flag))
             f.close()
         except:

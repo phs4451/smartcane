@@ -42,14 +42,14 @@ def main():
     
     if gps.convert('date1.txt') == 1:
       params['type'] = 'mms' # Message type ( sms, lms, mms, ata )
-      params['to'] = '010-8191-9585'
+      params['to'] = '010-4542-8562'
       params['from'] = '01064734451'
       params['text'] = 'Location ERROR!'
       params["image"] = imgname # image for MMS. type must be set as "MMS"
     else:
       latresult,longresult = gps.convert('date1.txt')
       params['type'] = 'mms' # Message type ( sms, lms, mms, ata )
-      params['to'] = '010-8191-9585'
+      params['to'] = '010-4542-8562'
       params['from'] = '01064734451'
       params['text'] = 'http://maps.google.com/maps?z=11&t=k&q=' + latresult + longresult # Message   
       params["image"] = imgname # image for MMS. type must be set as "MMS" 

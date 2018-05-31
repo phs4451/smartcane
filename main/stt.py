@@ -20,10 +20,10 @@ def main():
             sms_file = open('/home/pi/Desktop/smartcane/main/sms.py','w+')
             Text = "      params['to'] = '{}'\n"
             replaceText = Text.format(stt)
-            print(lines[46])
+            print(lines[44])
             print(replaceText)
-            lines[46] = replaceText
-            lines[53] = replaceText
+            lines[44] = replaceText
+            lines[51] = replaceText
 
             for line in lines:
                 sms_file.write(lines[i])
