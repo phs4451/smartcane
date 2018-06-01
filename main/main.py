@@ -75,7 +75,7 @@ def main(pin_button):
             print(str(pin_button)+" long_press")
             flag.setFlag(0)
             time.sleep(0.15)
-            sound.mms()
+            #sound.mms()
             sms.main()
             flag.setFlag(1)
             #obsDet.main(pin_ultra_trg1,pin_ultra_echo1,pin_vib1)

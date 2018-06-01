@@ -16,11 +16,15 @@ def distanceInCm(duration):
 
 def main(pin_list):
     while True:
-        s1 = getDistance(pin_list[0][0],pin_list[0][1],pin_list[4][0],pin_list[4][1],1)
-        s2 = getDistance(pin_list[1][0],pin_list[1][1],pin_list[4][0],pin_list[4][1],2)
-        s3 = getDistance(pin_list[2][0],pin_list[2][1],pin_list[4][0],pin_list[4][1],3)
+        s1 = getDistance(pin_list[0][0],pin_list[0][1],pin_list[3][0],pin_list[3][1],1)
+        s2 = getDistance(pin_list[1][0],pin_list[1][1],pin_list[3][0],pin_list[3][1],2)
+        s3 = getDistance(pin_list[2][0],pin_list[2][1],pin_list[3][0],pin_list[3][1],3)
+        print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3))
+        #s1 = getDistance(pin_list[0][0],pin_list[0][1],pin_list[4][0],pin_list[4][1],1)
+        #s2 = getDistance(pin_list[1][0],pin_list[1][1],pin_list[4][0],pin_list[4][1],2)
+        #s3 = getDistance(pin_list[2][0],pin_list[2][1],pin_list[4][0],pin_list[4][1],3)
         #s4 = getDistance(pin_list[3][0],pin_list[3][1],pin_list[4][0],pin_list[4][1],3)
-        print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3)+"\tSensor4: "+str(s4))
+        #print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3)+"\tSensor4: "+str(s4))
         #distCheck(pin_list[4][0],pin_list[4][1])
 
 

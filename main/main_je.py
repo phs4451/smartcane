@@ -101,7 +101,8 @@ def test():
         
 try:
     print('Programm Starts')
-    pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2]]
+    #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2]]
+    pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2]]
     obsDet.main(pin_list)
     #record.recording(camera)
     #camera.vflip=True

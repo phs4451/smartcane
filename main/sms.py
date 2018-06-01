@@ -14,6 +14,7 @@ import pprint
 from PIL import Image
 import record
 import flag
+import sound
 
 
 
@@ -64,6 +65,7 @@ def main():
         print("Success Count : %s" % response['success_count'])
         print("Error Count : %s" % response['error_count'])
         print("Group ID : %s" % response['group_id'])
+    
         os.system("mplayer /home/pi/Desktop/smartcane/voicefile/mms.MP3")
        
         if "error_list" in response:
