@@ -38,6 +38,7 @@ pin_ultra_echo3 =24
 #pin_ultra_echo4 =
 pin_vib1 = 12
 pin_vib2 = 25
+#piv_vib3 = 
 
 try:
     #os.system("omxplayer /home/pi/Desktop/smartcane/voicefile/start.MP3")
@@ -57,6 +58,7 @@ try:
     #GPIO.setup(pin_ultra_echo4,GPIO.IN)
     GPIO.setup(pin_vib1,GPIO.OUT)
     GPIO.setup(pin_vib2,GPIO.OUT)
+    #GPIO.setup(pin_vib3,GPIO.OUT)
     print("GPIO SETUP Complete")
 except:
     print("GPIO SETUP ERROR")
@@ -101,7 +103,7 @@ def test():
         
 try:
     print('Programm Starts')
-    #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2]]
+    #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,pin_vib3]]
     pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2]]
     obsDet.main(pin_list)
     #record.recording(camera)

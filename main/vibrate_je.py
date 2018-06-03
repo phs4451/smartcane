@@ -1,16 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import RPi.GPIO as GPIO      
-#from time import sleep
 import time
-'''
-VIB1 = 23
-VIB2 = 25
 
-GPIO.setmode(GPIO.BCM)    
-GPIO.setup(VIB1,GPIO.OUT)
-GPIO.setup(VIB2,GPIO.OUT)
-'''
 def setup(VIB1,VIB2):
     pwm_vib1 = GPIO.PWM(VIB1, 500)
     pwm_vib1.start(0)
@@ -113,13 +105,33 @@ def vibrate (Left,Right,Type,pin_vib1, pin_vib2):
                 if endtime - starttime >=runningtime :
                     clean_GPIO()
                     break
-
-def vibrate2(index,pin_vib1, pin_vib2):
-    #setup(pin_vib1, pin_vib2)
+                    
+def vibrate1(pin_vib3):
+    pwm_vib3 =GPIO.PWM(pin_vib3,500)
+    pwm_vib3.start(0)
+    
+    starttime = time.time()
+    runningtime = 1.5
+    High = 100
+    timeterm1 = 0.5
+    timeterm2 = 0.25
+    
+    while True:
+        pwm_vib3.ChangeDutyCycle(High)   
+        time.sleep(timeterm1)
+        pwm_vib3.ChangeDutyCycle(0)
+        time.sleep(tiemterm2)
+        
+        endtime = time.time()
+        if endtime-starttime >= runningtime:
+            break
+    
+def vibrate2(index, pin_vib1, pin_vib2):
     pwm_vib1 = GPIO.PWM(pin_vib1, 500)
     pwm_vib1.start(0)
     pwm_vib2 = GPIO.PWM(pin_vib2, 500)
     pwm_vib2.start(0)
+    
     starttime = time.time()
     High = 100
     timeterm = 0.5

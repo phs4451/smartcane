@@ -32,11 +32,12 @@ def tts_Clova(filename='tts.mp3',text='no text input'):
         response_body = response.read()
         with open(filename, 'wb') as f:
             f.write(response_body)
-        pygame.mixer.init()
-        pygame.mixer.music.load(filename)
-        pygame.mixer.music.play()
-        pygame.quit()
-        os.remove(filename)
+        os.system("mplayer "+filename)
+	#pygame.mixer.init()
+        #pygame.mixer.music.load(filename)
+        #pygame.mixer.music.play()
+        #pygame.quit()
+        #os.remove(filename)
         
     else:
         print("Error Code:" + rescode)

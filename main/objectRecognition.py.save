@@ -9,7 +9,7 @@ from collections import OrderedDict
 import pprint
 from PIL import Image
 import os
-import tts
+
 def encode_img(img):
 	with open(img,'rb') as imgfile:
 		encoded_img = base64.encodestring(imgfile.read())
@@ -21,12 +21,10 @@ def send_img(img,ip):
 	response = requests.post(ip,Jsondata)
 	result = response.content.decode('utf-8').split('\r\n')
 	temp =json.loads(result[5])
-	sentence = ''
 	if(temp['result'] is not ''):
-		sentence = make_sentence(temp['result'])
-		tts.tts_Clova(text = sentence)
+		print(temp['result'])
 	else:
-		print('parsing error')
+		print('오류 발생 - 파싱')
 
 def main():
     server_ip = 'http://210.94.185.47:30010'
@@ -35,7 +33,7 @@ def main():
     camera.vflip=True
     camera.hflip=True
     rawCapture = PiRGBArray(camera)
-    os.system("mplayer voicefile/camera.mp3")
+    #os.system("mplayer voicefile/camera.mp3")
     camera.capture(rawCapture,format='rgb',use_video_port=True)
     capture = Image.fromarray(rawCapture.array)
     rawCapture.truncate(0)
@@ -46,15 +44,8 @@ def main():
     camera.close()
 
 
-def make_sentence(items):
-    name_file = open('list.txt','r')
-    name_list = []
-    while True:
-        line = name_file.readline()
-        if not line: break
-        name_list.append(line.split('#'))
-    name_file.close()
-    
+
+# -*- coding: utf-8 -*-def make_sentence(items)
     #items = 'chair,5#person,2,#cup,5'
     items = items.split('#')
     items_split = []
@@ -66,6 +57,14 @@ def make_sentence(items):
             if name[0] == item[0]:
                 result_list.append(name[1]+' '+item[1]+name[2])
                 break
+            
+    name_file = open('list.txt','r')
+    name_list = []
+    while True:
+        line = name_file.readline()
+        if not line: break
+        name_list.append(line.split('#'))
+    name_file.close()
     #print(result_list)
     result_sen = ''
     for result in result_list:

@@ -29,10 +29,7 @@ def recording():
                     camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     camera.stop_preview()
                     camera.stop_recording()
-                    
-                    os.system('MP4Box -add '+'/home/pi/Desktop/smartcane/blackbox/record/'+realstarttime+'.h264'+' /home/pi/Desktop/smartcane/blackbox/record/'+realstarttime+'.mp4')
-                    os.system('rm /home/pi/Desktop/smartcane/blackbox/record/'+realstarttime+'.h264')
-                    time.sleep(0.5)
+                    realstarttime = 1
                     #oscheck.getDirSize('/home/pi/Desktop/smartcane/blackbox/record')
 
                   
@@ -42,11 +39,8 @@ def recording():
                         camera.stop_preview()
                         camera.stop_recording()
                         camera.close()
+                        realstarttime = 1
 
-                        os.system('MP4Box -add /home/pi/Desktop/smartcane/blackbox/record/'+realstarttime+'.h264 /home/pi/Desktop/smartcane/blackbox/record/'+realstarttime+'.mp4') 
-                        os.system('rm /home/pi/Desktop/smartcane/blackbox/record/'+realstarttime+'.h264')
-                        
-                        
                     except picamera.PiCameraError:
                         continue
                     

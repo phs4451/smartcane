@@ -1,0 +1,80 @@
+person#사람#명#
+bicycle#자전거#대#
+car#자동차#대#
+motorbike#오토바이#대#
+aeroplane#비행기#대#
+bus#버스#대#
+train#기차#대#
+truck#트럭#대#
+boat#보트#척#
+traffic light#신호등#개#
+fire hydrant#소화전#개#
+stop sign#정지 표지#개#
+parking meter#주차권 판매기#대#
+bench#벤치#개#
+bird#새#마리#
+cat#고양이#마리#
+dog#개#마리#
+horse#말#마리#
+sheep#양#마리#
+cow#소#마리#
+elephant#코끼리#마리#
+bear#곰#마리#
+zebra#얼룩말#마리#
+giraffe#기린#마리#
+backpack#가방#개#
+umbrella#우산#개#
+handbag#핸드백#개#
+tie#넥타이#개#
+suitcase#여행 가방#벌#
+frisbee#원반#개#
+skis#스키#개#
+snowboard#스노우보드#개#
+sports ball#스포츠 공#개#
+kite#연#개#
+baseball bat#야구 방망이#개#
+baseball glove#글러브#개#
+skateboard#스케이트 보드#개#
+surfboard#서핑 보드#개#
+tennis racket#테니스 라켓#개#
+bottle#병#개#
+wine glass#와인 병#개#
+cup#컵#개#
+fork#포크#개#
+knife#칼#개#
+spoon#숟가락#개#
+bowl#접시#개#
+banana#바나나#개#
+apple#사과#개#
+sandwich#샌드위치#개#
+orange#오렌지#개#
+broccoli#브로콜리#개#
+carrot#당근#개#
+hot dog#핫도그#개#
+pizza#피자#개#
+donut#도넛#개#
+cake#케이크#개#
+chair#의자#개#
+sofa#소파#개#
+pottedplant#주전자#개#
+bed#침대#개#
+diningtable#식탁#개#
+toilet#화장실#개
+tvmonitor#모니터#개#
+laptop#노트북#대#
+mouse#마우스#개#
+remote#리모콘#개#
+keyboard#키보드#개#
+cell phone#휴대전화#개#
+microwave#전자레인지#대#
+oven#오븐#대#
+toaster#토스터#대#
+sink#싱크대#개#
+refrigerator#냉장고#대#
+book#책#권#
+clock#시계#개#
+vase#화분#개#
+scissors#가위#개#
+teddy bear#곰인형#개#
+hair drier#헤어드라이#개#
+toothbrush#칫솔#개#
