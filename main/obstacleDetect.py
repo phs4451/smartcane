@@ -60,7 +60,7 @@ def clear_dist():     #일정 길이 이상으로 저장되기 전 리스트 앞부분 삭제
             dist_list[:15] = []
                    
 def getDistance(pin_ultra_trg,pin_ultra_echo,pin_vib1, pin_vib2, index):
-    time.sleep(0.1)
+    time.sleep(0.01)
     pulse_start = 0
     pulse_end = 0
     distance = 0
@@ -100,8 +100,8 @@ def getDistance(pin_ultra_trg,pin_ultra_echo,pin_vib1, pin_vib2, index):
             #dist_check[index-1].append(distance)
             #warning = distCheck()
             #print(warning)
-            if distance <= 50:
-                vibrate_je.vibrate2(index,pin_vib1, pin_vib2)
+            if distance <= 100:
+                vibrate_je.vibrate2(index,distance, pin_vib1, pin_vib2)
             return distance
         else:
             return MAX_DISTANCE_CM

@@ -12,11 +12,10 @@ dirname = './block_result'
 if not os.path.exists(dirname):
     os.makedirs(dirname)
 
-target = os.path.join(dirname,"blockimage.jpg")
+target = os.path.join(dirname,"test2.jpg")
 
-row = 3
-col = 3
-
+row = 1
+col = 1
 detect_index = [[0 for i in range(row)] for j in range(col)]
 
 #def adjust_gamma(image, gamma=1.0):
@@ -33,15 +32,16 @@ def detect(c,img,i,j):
         peri = cv2.arcLength(c,True)
         approx = cv2.approxPolyDP(c, 0.02*peri, True) # smooth edge
         (x, y, w, h) = cv2.boundingRect(approx)
-        print('w = ' + str(w) + '\th = ' + str(h) )
+        print('w = ' + str(w) + '\th = ' + str(h)+'\tx = ' + str(x) + '\ty = ' + str(y) )
         
         #일정 크기 이상의 모양만 식별
-        if (40 < w < 500 and 40 < h < 500):
+        if (40 < w < 1500 and 40 < h < 1500):
             #이 부분은 고민 후 수정
             if (len(approx) == 3 or len(approx) == 4 or len(approx) == 5 or len(approx) == 6 or len(approx) == 7 or len(approx) == 8 ):
                 cv2.drawContours(img, [approx],  -1, (0, 0, 255), 2)
                 detect_index[i][j] = 1
             else:
+                cv2.drawContours(img, [approx],  -1, (255, 0, 255), 2)
                 print( "Not block" )
 
 
@@ -71,16 +71,16 @@ def cutImage():
 #main
 def main():
     
-    imgname=os.path.join(dirname,'blockimage.jpg')
-    camera = picamera.PiCamera()
-    camera.vflip=True
-    camera.hflip=True
-    capture = PiRGBArray(camera)
+    #imgname=os.path.join(dirname,'blockimage.jpg')
+    #camera = picamera.PiCamera()
+    #camera.vflip=True
+    #camera.hflip=True
+    #capture = PiRGBArray(camera)
     
-    camera.capture(capture,format='rgb',use_video_port=True)
-    capture = Image.fromarray(capture.array)
-    capture.save(imgname)
-    camera.close()
+    #camera.capture(capture,format='rgb',use_video_port=True)
+    #capture = Image.fromarray(capture.array)
+    #capture.save(imgname)
+    #camera.close()
     
     #flag.initFlag()
     cutImage()

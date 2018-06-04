@@ -2,112 +2,21 @@
 
 import RPi.GPIO as GPIO      
 import time
+import math
 
 def setup(VIB1,VIB2):
-    pwm_vib1 = GPIO.PWM(VIB1, 500)
+    pwm_vib1 = GPIO.PWM(VIB1, 1000)
     pwm_vib1.start(0)
-    pwm_vib2 = GPIO.PWM(VIB2, 500)
+    pwm_vib2 = GPIO.PWM(VIB2, 1000)
     pwm_vib2.start(0)
-
-def main(warning,pin_vib1, pin_vib2):
-    
-    if len(warning)==0:
-        return
-        
-    elif len(warning) ==1:
-        if 1 in warning:
-            vibrate(True,False,1,pin_vib1, pin_vib2)
-        elif 2 in warning:
-            vibrate(True,True,1,pin_vib1, pin_vib2)
-        elif 3 in warning:
-            vibrate(False,True,1,pin_vib1, pin_vib2)
-            
-    elif len(warning)==2:
-        if 1 and 2 in warning:
-            vibrate(True,False,2,pin_vib1, pin_vib2)
-        elif 2 and 3 in warning:
-            vibrate(False,True,2,pin_vib1, pin_vib2)
-
-    elif len(warning)==3:
-        vibrate(True, True, 2, pin_vib1, pin_vib2)  
     
 def clean_GPIO():
     pwm_vib1.stop()
     pwm_vib2.stop()
     GPIO.cleanup()
-    
-    
-def vibrate (Left,Right,Type,pin_vib1, pin_vib2):
-    setup(pin_vib1, pin_vib2)
-    startime = time.time()
-    
-    High = 100
-    Low = 0
-    timeterm = 0.5
-    runningtime = 5
-    
-    while True:
-        if Type==1:
-            if Left and Right:
-                pwm_vib1.ChangeDutyCycle(High)
-                pwm_vib2.ChangeDutyCycle(High)
-                time.sleep(timeterm)
-                pwm_vib1.ChangeDutyCycle(Low)
-                pwm_vib2.ChangeDutyCycle(Low)
-                time.sleep(timeterm)
-        
-                endtime = time.time()
-                if endtime - starttime >=runningtime :
-                    clean_GPIO()
-                    break
-            
-            elif Left and (not Right):
-                pwm_vib1.ChangeDutyCycle(High)
-                time.sleep(timeterm)
-                pwm_vib1.ChangeDutyCycle(Low)
-                time.sleep(timeterm)
-        
-                endtime = time.time()
-                if endtime - starttime >=runningtime :
-                    clean_GPIO()
-                    break
-                    
-            elif (not Left) and Right:
-                pwm_vib2.ChangeDutyCycle(High)
-                time.sleep(timeterm)
-                pwm_vib2.ChangeDutyCycle(Low)
-                time.sleep(timeterm)
-        
-                endtime = time.time()
-                if endtime - starttime >= runningtime :
-                    clean_GPIO()
-                    break
-                    
-        elif Type==2:
-            if Left and Right:
-                pwm_vib1.ChangeDutyCycle(High)
-                pwm_vib2.ChangeDutyCycle(High)
-                endtime = time.time()
-                if endtime - starttime >=runningtime :
-                    clean_GPIO()
-                    break
-            elif Left and (not Right):
-                pwm_vib1.ChangeDutyCycle(High)
-                pwm_vib2.ChangeDutyCycle(Low)
-                endtime = time.time()
-                if endtime - starttime >= runningtime :
-                    clean_GPIO()
-                    break
-            elif (not Left) and Right:
-                pwm_vib1.ChangeDutyCycle(Low)
-                pwm_vib2.ChangeDutyCycle(High)
-                endtime = time.time()
-                if endtime - starttime >=runningtime :
-                    clean_GPIO()
-                    break
-                    
+ 
 def vibrate1(pin_vib3):
-    pwm_vib3 =GPIO.PWM(pin_vib3,500)
+    pwm_vib3 =GPIO.PWM(pin_vib3,1000)
     pwm_vib3.start(0)
     
     starttime = time.time()
@@ -115,65 +24,51 @@ def vibrate1(pin_vib3):
     High = 100
     timeterm1 = 0.5
     timeterm2 = 0.25
-    
-    while True:
-        pwm_vib3.ChangeDutyCycle(High)   
-        time.sleep(timeterm1)
+    try:
+        while True:
+            pwm_vib3.ChangeDutyCycle(High)   
+            time.sleep(timeterm1)
+            pwm_vib3.ChangeDutyCycle(0)
+            time.sleep(tiemterm2)
+        
+            endtime = time.time()
+            if endtime-starttime >= runningtime:
+                break
+    finally:
         pwm_vib3.ChangeDutyCycle(0)
-        time.sleep(tiemterm2)
-        
-        endtime = time.time()
-        if endtime-starttime >= runningtime:
-            break
     
-def vibrate2(index, pin_vib1, pin_vib2):
-    pwm_vib1 = GPIO.PWM(pin_vib1, 500)
-    pwm_vib1.start(0)
-    pwm_vib2 = GPIO.PWM(pin_vib2, 500)
-    pwm_vib2.start(0)
+def vibrate2(index,distance, pin_vib1, pin_vib2):
+    pwm_vib1 = GPIO.PWM(pin_vib1, 1000)
+    pwm_vib2 = GPIO.PWM(pin_vib2, 1000)
     
     starttime = time.time()
+    #High = 50*math.cos(distance)+50
     High = 100
-    timeterm = 0.5
+    timeterm = 0.3
     
-    while True:
-        if index ==1:
-            pwm_vib1.ChangeDutyCycle(High)
-            time.sleep(timeterm)
-            break
-        elif index ==2:
-            pwm_vib1.ChangeDutyCycle(High)
-            pwm_vib2.ChangeDutyCycle(High)
-            time.sleep(timeterm)
-            break
-        elif index ==3:
-            pwm_vib2.ChangeDutyCycle(High)
-            time.sleep(timeterm)
-            break
+    try:
+        while True:
+            if index ==1:
+                pwm_vib1.start(100)
+                time.sleep(timeterm)
+                pwm_vib1.stop()
+                break
+            elif index ==2:
+                pwm_vib1.start(High)
+                pwm_vib2.start(High)
+                time.sleep(timeterm)
+                pwm_vib1.stop()
+                pwm_vib2.stop()
+                break
+            elif index ==3:
+                pwm_vib2.start(High)
+                time.sleep(timeterm)
+                pwm_vib2.stop()
+                break
+    finally:
+        pwm_vib1.stop()
+        pwm_vib2.stop()
 
-'''
-try:
-    starttime = time.time()
-    while True:
-        duty_str = input("Enter Brightness (0 to 100):") 
-        duty = int(duty_str)
-        
-        if duty > 100: 
-            print("wrong input value.") 
-        else: 
-            pwm_vib.ChangeDutyCycle(duty) 
-        
-        endtime = time.time()
-        if endtime-starttime >=5:
-          break
-                   
-        end_key = raw_input(" - Stop to Blink LED, Please enter the 'end' : ") 
-        if end_key == "end": 
-          break
-             
-except KeyboardInterrupt:      
-        GPIO.cleanup()
-'''        
         
 if __name__ == '__main__':
    main()

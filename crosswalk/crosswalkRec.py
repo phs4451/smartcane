@@ -40,6 +40,7 @@ import timeit
 import glob
 from sklearn import linear_model, datasets
 import os
+import time
 
 #==========================#
 #---------functions--------#
@@ -231,6 +232,7 @@ def process(im):
 os.system('sudo modprobe bcm2835-v4l2')
 cap = cv2.VideoCapture(0) #load a video
 
+
 W = cap.get(3) #get width
 H = cap.get(4) #get height
 
@@ -256,60 +258,65 @@ i = 0
 state = ""
 
 while(cap.isOpened()):
-    
-    ret, frame = cap.read()
-    img = scipy.misc.imresize(frame, (H,W)) 
-    processedFrame,dx,dy = process(img)
-    #draw camera's POV
-    cv2.circle(img,(int(W/2),int(H/2)),5,(0,0,255),8)
-    
+    time.sleep(1)
     try:
+        ret, frame = cap.read()
+        frame = cv2.flip(frame,0)
+        frame = cv2.flip(frame,1)
+        img = scipy.misc.imresize(frame, (H,W)) 
         processedFrame,dx,dy = process(img)
+        #draw camera's POV
+        cv2.circle(img,(int(W/2),int(H/2)),5,(0,0,255),8)
+        
+        try:
+            processedFrame,dx,dy = process(img)
 
-        if (i < 6):
-            Dx.append(dx)
-            Dy.append(dy)
-            i=i+1
+            if (i < 6):
+                Dx.append(dx)
+                Dy.append(dy)
+                i=i+1
 
-        else:
-            DxAve = sum(Dx)/len(Dx)
-            DyAve = sum(Dy)/len(Dy)
-            del Dx[:]
-            del Dy[:]
-            i=0
+            else:
+                DxAve = sum(Dx)/len(Dx)
+                DyAve = sum(Dy)/len(Dy)
+                del Dx[:]
+                del Dy[:]
+                i=0
 
-        if (DyAve > 30) and (abs(DxAve) < 300):        
-            #check if the vanishing point and the next vanishing point aren't too far from each other 
-            if (((DxAve - Dxold)**2 + (DyAve - Dyold)**2) < 150**2) == True:  ##distance 150 px max 
-                cv2.line(img,(int(W/2),int(H/2)),(int(W/2)+int(DxAve),int(H/2)+int(DyAve)),(0,0,255),7)
+            if (DyAve > 30) and (abs(DxAve) < 300):        
+                #check if the vanishing point and the next vanishing point aren't too far from each other 
+                if (((DxAve - Dxold)**2 + (DyAve - Dyold)**2) < 150**2) == True:  ##distance 150 px max 
+                    cv2.line(img,(int(W/2),int(H/2)),(int(W/2)+int(DxAve),int(H/2)+int(DyAve)),(0,0,255),7)
+                    
+                    #walking directions
+                    if abs(DxAve) < 80 and DyAve > 100 and abs(Dxold-DxAve) < 20:
+                        state = 'Straight'
+                        cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,0),2,cv2.LINE_AA)
+
+                    elif DxAve > 80 and DyAve > 100 and abs(Dxold-DxAve) < 20:
+                        state = 'Right'
+                        cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,255),2,cv2.LINE_AA)
+
+                    elif DxAve < 80 and DyAve > 100 and abs(Dxold-DxAve) < 20:
+                        state = 'Left'
+                        cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,255),2,cv2.LINE_AA)
+                else:
+                    cv2.line(img,(int(W/2),int(H/2)),(int(W/2)+int(Dxold),int(H/2)+int(Dyold)),(0,0,255),)
                 
-                #walking directions
-                if abs(DxAve) < 80 and DyAve > 100 and abs(Dxold-DxAve) < 20:
-                    state = 'Straight'
+                #walking directions 
+                if state == 'Straight':
                     cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,0),2,cv2.LINE_AA)
+                else:
+                    cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,255),2,cv2.LINE_AA)           
 
-                elif DxAve > 80 and DyAve > 100 and abs(Dxold-DxAve) < 20:
-                    state = 'Right'
-                    cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,255),2,cv2.LINE_AA)
+                Dxold = DxAve
+                Dyold = DyAve
 
-                elif DxAve < 80 and DyAve > 100 and abs(Dxold-DxAve) < 20:
-                    state = 'Left'
-                    cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,255),2,cv2.LINE_AA)
-            else:
-                cv2.line(img,(int(W/2),int(H/2)),(int(W/2)+int(Dxold),int(H/2)+int(Dyold)),(0,0,255),)
+        except:
+            print('Failed to process frame')
             
-            #walking directions 
-            if state == 'Straight':
-                cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,0),2,cv2.LINE_AA)
-            else:
-                cv2.putText(img,state,(50,50), cv2.FONT_HERSHEY_PLAIN, 3,(0,0,255),2,cv2.LINE_AA)           
-
-            Dxold = DxAve
-            Dyold = DyAve
-
     except:
-        print('Failed to process frame')
-
+            print('Hmm')
     #show & save
     img = cv2.imshow('Processed',processedFrame) 
     out.write(processedFrame)

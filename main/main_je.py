@@ -105,7 +105,7 @@ try:
     print('Programm Starts')
     #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,pin_vib3]]
     pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2]]
-    obsDet.main(pin_list)
+    #obsDet.main(pin_list)
     #record.recording(camera)
     #camera.vflip=True
     #objRec.main(camera,rawCapture,imgname,server_ip)
@@ -117,13 +117,16 @@ try:
     #t3 = Process(target = main, args=(pin_button1,))
     #t4 = Process(target = main, args=(pin_button2,))
     #t4 = Process(target = record.recording,args=())
+    t2 = Process(target=obsDet.main, args=(pin_list, ))
+    t3 = Process(target = record.recording,args=())
     #print('first '+str(record.flag))
     #t1.start()    
-    #t2.start()  
-    #t3.start()
+    t2.start()  
+    t3.start()
     #t4.start()
     #t5.start()
-    #t3.join()
+    t2.join()
+    t3.join()
     #t4.join()
     #t5.join()
     #t1.join()    

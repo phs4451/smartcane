@@ -16,16 +16,17 @@ def distanceInCm(duration):
     return (duration/2)/29.1
 
 def main(pin_list):
+
     while True:
-        s1 = getDistance(pin_list[0][0],pin_list[0][1],pin_list[3][0],pin_list[3][1],1)
-        s2 = getDistance(pin_list[1][0],pin_list[1][1],pin_list[3][0],pin_list[3][1],2)
-        s3 = getDistance(pin_list[2][0],pin_list[2][1],pin_list[3][0],pin_list[3][1],3)
-        print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3))
-        #s1 = getDistance(pin_list[0][0],pin_list[0][1],pin_list[4][0],pin_list[4][1],pin_list[4][2],1)
-        #s2 = getDistance(pin_list[1][0],pin_list[1][1],pin_list[4][0],pin_list[4][1],pin_list[4][2],2)
-        #s3 = getDistance(pin_list[2][0],pin_list[2][1],pin_list[4][0],pin_list[4][1],pin_list[4][2],3)
-        #s4 = getDistance(pin_list[3][0],pin_list[3][1],pin_list[4][0],pin_list[4][1],pin_list[4][2],4)
-        #print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3)+"\tSensor4: "+str(s4))
+        #s1 = getDistance(pin_list[0][0],pin_list[0][1],pin_list[3][0],pin_list[3][1],1)
+        #s2 = getDistance(pin_list[1][0],pin_list[1][1],pin_list[3][0],pin_list[3][1],2)
+        #s3 = getDistance(pin_list[2][0],pin_list[2][1],pin_list[3][0],pin_list[3][1],3)
+        #print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3))
+        s1 = getDistance(pin_list[0][0],pin_list[0][1],pin_list[4][0],pin_list[4][1],pin_list[4][2],1)
+        s2 = getDistance(pin_list[1][0],pin_list[1][1],pin_list[4][0],pin_list[4][1],pin_list[4][2],2)
+        s3 = getDistance(pin_list[2][0],pin_list[2][1],pin_list[4][0],pin_list[4][1],pin_list[4][2],3)
+        s4 = getDistance(pin_list[3][0],pin_list[3][1],pin_list[4][0],pin_list[4][1],pin_list[4][2],4)
+        print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3)+"\tSensor4: "+str(s4))
 
 
 def moving_average(a,n=3):
@@ -46,7 +47,7 @@ def clear_dist():     #일정 길이 이상으로 저장되기 전 리스트 앞부분 삭제
         dist_check[:15] = []
                    
 def getDistance(pin_ultra_trg,pin_ultra_echo,pin_vib1, pin_vib2, pin_vib3, index):
-    time.sleep(0.1)
+    time.sleep(0.01)
     pulse_start = 0
     pulse_end = 0
     distance = 0
@@ -86,7 +87,7 @@ def getDistance(pin_ultra_trg,pin_ultra_echo,pin_vib1, pin_vib2, pin_vib3, index
                 dist_check.append(distance)
                 distCheck(pin_vib3)
                 
-            elif index!=4 and distance <= 50:
+            elif index!=4 and distance <= 180:
                 vibrate_je.vibrate2(index,pin_vib1, pin_vib2)
             return distance
         else:
