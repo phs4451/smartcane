@@ -7,12 +7,18 @@ from operator import eq
 import flag
 import oscheck
 
+cmd = 'MP4Box add ~.h264 !.mp4'
+
+folder_name ='./record/'
+if not os.path.exists(folder_name):
+    os.mkdir(folder_name)
+
 def recording():
  
       with picamera.PiCamera() as camera:
              camera.vflip=True
              camera.hflip=True
-             camera.resolution = (800,600)
+             camera.resolution = (400,300)
              #filename = '/home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.h264'
              #camera.start_preview()
              #camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -49,7 +55,7 @@ def recording():
                         camera.start_preview()
                         camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                         starttime = str(int(time.time()))
-                        filename = '/home/pi/Desktop/smartcane/blackbox/record/'+starttime+'.h264'
+                        filename = os.path.join(folder_name,starttime+'.h264')
                         camera.start_recording(filename) 
                         realstarttime = starttime
                         #print('first')

@@ -17,6 +17,7 @@ import RPi.GPIO as GPIO
 from multiprocessing import Process
 
 os.system("sudo rdate -s time.bora.net")
+GPIO.cleanup()
 os.system("clear")
 
 #GPIO Initializing
@@ -28,8 +29,8 @@ pin_ultra_trg2 = 5
 pin_ultra_echo2 = 6
 pin_ultra_trg3 =23
 pin_ultra_echo3 =24
-pin_vib1 = 12
-pin_vib2 = 25
+pin_vib1 = 25
+pin_vib2 = 12
 
 try:
     sound.start()
@@ -98,7 +99,7 @@ try:
     
 finally:
     sound.finish()
-    print("Cleaning up GPIO...")
+    print("main stop -------------------------- Cleaning up GPIO...")
     GPIO.cleanup()
 
 
