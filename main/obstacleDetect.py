@@ -10,7 +10,7 @@ import vibrate_je
 MAX_DISTANCE_CM = 300
 MAX_DURATION_TIMEOUT = (MAX_DISTANCE_CM * 2 * 29.1) #17460 # 17460us = 300cm
 dist_check=[[],[],[]]
-avg_list=[[],[],[]]
+
 detect_threshold = 80
 
 def distanceInCm(duration):

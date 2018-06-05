@@ -58,11 +58,11 @@ def main(pin_button):
         
         if count == 1:
             print(str(pin_button)+" once")
-            sound.camera()
-            flag.setFlag(0)
-            time.sleep(0.15)
-            objRec.main()
-            flag.setFlag(1)
+            #sound.camera()
+            #flag.setFlag(0)
+            #time.sleep(0.15)
+            #objRec.main()
+            #flag.setFlag(1)
             
         elif count == 2:
             print(str(pin_button)+" twice")
@@ -87,15 +87,15 @@ try:
     
     pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2]]
     #obsDet.main(pin_list)
-    t1= Process(target = obsDet.main, args=(pin_list,))
+    #t1= Process(target = obsDet.main, args=(pin_list,))
     t2 = Process(target = main,args=(pin_button1,))
-    t3 = Process(target = record.recording,args=())
-    t1.start()
+    #t3 = Process(target = record.recording,args=())
+    #t1.start()
     t2.start()
-    t3.start()
-    t1.join()
+    #t3.start()
+    #t1.join()
     t2.join()
-    t3.join()
+    #t3.join()
     
 finally:
     sound.finish()

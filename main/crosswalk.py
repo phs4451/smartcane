@@ -1,0 +1,3 @@
+import blockdetect
+blockdetect.main()
+

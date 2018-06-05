@@ -12,13 +12,12 @@ dirname = './block_result'
 if not os.path.exists(dirname):
     os.makedirs(dirname)
 
-target = os.path.join(dirname,"white4.jpg")
+target = os.path.join(dirname,"1do.jpg")
 
 row = 1
 col = 1
+detect_index = [[0 for i in range(row)] for j in range(col)]
 
-areas = [] 
-cnt = 0 
 #def adjust_gamma(image, gamma=1.0):
 
    #invGamma = 1.0 / gamma
@@ -27,27 +26,25 @@ cnt = 0
 
    #return cv2.LUT(image, table)
 
-def detect(c,img):
-        
-        
+def detect(c,img,i,j):
+    
         shape = "unidentified"
         peri = cv2.arcLength(c,True)
-        approx = cv2.approxPolyDP(c, 0.005*peri, True) # smooth edge
+        approx = cv2.approxPolyDP(c, 0.02*peri, True) # smooth edge
         (x, y, w, h) = cv2.boundingRect(approx)
-        
+        print('w = ' + str(w) + '\th = ' + str(h)+'\tx = ' + str(x) + '\ty = ' + str(y) )
         
         #일정 크기 이상의 모양만 식별
-        if (10 < w < 1500 and 10 < h < 1500):
+        if (40 < w < 1500 and 40 < h < 1500):
             #이 부분은 고민 후 수정
-            if (len(approx) == 3 or len(approx) == 4 or len(approx) == 5 ):
+            if (len(approx) == 3 or len(approx) == 4 or len(approx) == 5 or len(approx) == 6 or len(approx) == 7 or len(approx) == 8 ):
                 cv2.drawContours(img, [approx],  -1, (0, 0, 255), 2)
-                areas.append((cv2.contourArea(c),x,y,w,h))
-                print('w = ' + str(w) + '\th = ' + str(h)+'\tx = ' + str(x) + '\ty = ' + str(y) )
-                
+                detect_index[i][j] = 1
             else:
-                #cv2.drawContours(img, [approx],  -1, (0, 0, 255), 2)
+                cv2.drawContours(img, [approx],  -1, (255, 0, 255), 2)
                 print( "Not block" )
-        
+
+
 def cutImage():
     #hi = cv2. imread(target)
     #target1 = cv2.resize(hi, None, fx=0.2, fy=0.2, interpolation=cv2.INTER_AREA)
@@ -74,16 +71,16 @@ def cutImage():
 #main
 def main():
     
-    imgname=os.path.join(dirname,'blockimage.jpg')
-    camera = picamera.PiCamera()
-    camera.vflip=True
-    camera.hflip=True
-    capture = PiRGBArray(camera)
+    #imgname=os.path.join(dirname,'blockimage.jpg')
+    #camera = picamera.PiCamera()
+    #camera.vflip=True
+    #camera.hflip=True
+    #capture = PiRGBArray(camera)
     
-    camera.capture(capture,format='rgb',use_video_port=True)
-    capture = Image.fromarray(capture.array)
-    capture.save(imgname)
-    camera.close()
+    #camera.capture(capture,format='rgb',use_video_port=True)
+    #capture = Image.fromarray(capture.array)
+    #capture.save(imgname)
+    #camera.close()
     
     #flag.initFlag()
     cutImage()
@@ -93,7 +90,9 @@ def main():
     
     for i in range(0, row): 
         for j in range(0, col): 
-
+            
+            detect_index[i][j] = 0
+            
             # 가우시안 필터 처리
             cutimg[i][j]  = cv2.imread(os.path.join(dirname,"{0}x{1}_{2}".format(i, j, "cutresult.jpg")))
             blur = cv2.GaussianBlur(cutimg[i][j],(3,3),0)
@@ -119,11 +118,12 @@ def main():
             img_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)  
 
             img_h, img_s, img_v = cv2.split(img_hsv)
-            
+                
+        
 
             #노란색 범위 지정
-            lower_yellow = np.array([0,0,170])
-            upper_yellow = np.array([180,20,255]) 
+            lower_yellow = np.array([10,100,30])  
+            upper_yellow = np.array([30,255,255])  
 
             mask = cv2.inRange(img_hsv, lower_yellow, upper_yellow)    
 
@@ -143,11 +143,8 @@ def main():
             #thr = cv2.adaptiveThreshold(frame,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,15,2)
 
             for con in contours:
-                detect(con,img)
-                
-            areas_sorted = sorted(areas, key=lambda area: area[0], reverse =True)
-            print(areas_sorted)
-           
+                detect(con,img,i,j)
+            
             img_detect_name = os.path.join(dirname,str(i) +'x'+str( j) +'_detect.jpg')
             cv2.imwrite(img_detect_name, img)
     
@@ -155,14 +152,13 @@ def main():
     img2_name = os.path.join(dirname,'0x0_detect.jpg')
     temp =cv2.imread(img1_name)
     temp2 =cv2.imread(img2_name)
-    for i,area in enumerate(areas_sorted):
-                print(i,area[1],area[2])
-                cv2.putText(temp2,str(i),(area[1],area[2]),cv2.FONT_HERSHEY_SCRIPT_SIMPLEX,1,(255,255,255))
     cv2.imshow('original',temp)
     cv2.imshow('detect',temp2)
-    #cv2.imshow('thr',thr)
+    cv2.imshow('thr',thr)
     #cv2.imshow('clahe',final_image)
     #cv2.imshow('ad',adjusted)
     cv2.waitKey(0)
     cv2.destroyAllWindows() 
+    
+    print(detect_index)
 

@@ -1,0 +1,4 @@
+	import blockdetect
+while True:
+blockdetect.main()
+
