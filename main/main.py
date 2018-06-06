@@ -23,14 +23,18 @@ os.system("clear")
 #GPIO Initializing
 pin_button1 = 26
 pin_button2 = 19
+#pin_SW = 
 pin_ultra_trg1 = 20
 pin_ultra_echo1 = 21
 pin_ultra_trg2 = 5
 pin_ultra_echo2 = 6
 pin_ultra_trg3 =23
 pin_ultra_echo3 =24
+#pin_ultra_trg3 =
+#pin_ultra_echo3 =
 pin_vib1 = 25
 pin_vib2 = 12
+#pin_vib3 =
 
 try:
     sound.start()
@@ -39,6 +43,7 @@ try:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin_button1,GPIO.IN)
     GPIO.setup(pin_button2,GPIO.IN)
+    #GPIO.setup(pin_SW, GPIO.IN, pull_up_down = GPIO.PUD_UP)
     GPIO.setup(pin_ultra_trg1,GPIO.OUT)
     GPIO.setup(pin_ultra_echo1,GPIO.IN)
     GPIO.setup(pin_ultra_trg2,GPIO.OUT)
@@ -86,6 +91,7 @@ try:
     print('Programm Starts')
     
     pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2]]
+    #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,_pin_vib3],[pin_SW]]
     #obsDet.main(pin_list)
     #t1= Process(target = obsDet.main, args=(pin_list,))
     t2 = Process(target = main,args=(pin_button1,))

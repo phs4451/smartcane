@@ -35,7 +35,8 @@ def vibrate1(pin_vib3):
             if endtime-starttime >= runningtime:
                 break
     finally:
-        pwm_vib3.ChangeDutyCycle(0)
+        pwm_vib3.stop()
+        print('vibrate stop')
     
 def vibrate2(index,distance, pin_vib1, pin_vib2):
     time.sleep(0.05)
@@ -43,7 +44,6 @@ def vibrate2(index,distance, pin_vib1, pin_vib2):
     pwm_vib2 = GPIO.PWM(pin_vib2, 1000)
     pwm_vib1.start(0)
     pwm_vib2.start(0)
-    #starttime = time.time()
     #High = 50*math.cos(distance)+50
     High = 100
     timeterm = 0.3

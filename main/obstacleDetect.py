@@ -9,7 +9,7 @@ import vibrate_je
 
 MAX_DISTANCE_CM = 300
 MAX_DURATION_TIMEOUT = (MAX_DISTANCE_CM * 2 * 29.1) #17460 # 17460us = 300cm
-dist_check=[[],[],[]]
+dist_check=[[],[],[],[]]
 
 detect_threshold = 80
 
@@ -25,13 +25,15 @@ def main(pin_list):
         print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3))
         
         for i,dist in enumerate(dist_check):
-            if len(dist)>=10:
+            if len(dist)>=10 and i < 3 :
                 temp  = []
                 temp = moving_average(dist)
                 if temp[-1] <= detect_threshold:
                     print(i+1,temp[-1],len(dist))
                     vibrate_je.vibrate2(i+1,temp[-1],pin_list[3][0],pin_list[3][1])
-                    break;
+                    break
+            elif len(dist)>=10 :
+                distCheck(dist, pin_vib3)
             #avg.append(moving_average(dist_check[i]))
             #if avg[i][-1] - avg[i][-4]>10 and len(avg[i]) > 5:
                 #vibrate_je(i+1,avg[i][-1],pin_vib1,pin_vib2)
@@ -49,22 +51,15 @@ def moving_average(a,n=3):
     return ret[n-1:]//n
     #return ret[-n:]/n
     
-def distCheck(pin_vib1, pin_vib2):
-    warning = []
-    for dist_list in dist_check:
-        #print("Distance List : ",dist_list)
-        if len(dist_list)>3:
-            g = np.gradient(moving_average(dist_list))
-        else:
-            #g = np.gradient(moving_average(dist_list,1))   #gradient of moving average list
-            return
+def distCheck(dist, pin_vib3):
+    
+    if len(dist)>3:
+        g = np.gradient(moving_average(dist))
+    else:  
+        return
 
-        if min(g,default = 0 ) <= -10:  
-            warning.append(dist_check.index(dist_list) + 1)  #인덱스 반환
-    
-    #vibrate_je.main(warning,pin_vib1, pin_vib2)
-    
-    return warning
+    if min(g,default = 0 ) <= -10:  
+        vibrate_je.vibrate1(pin_vib3)
                 
 
 def clear_dist():     #일정 길이 이상으로 저장되기 전 리스트 앞부분 삭제
