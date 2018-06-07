@@ -6,7 +6,7 @@ import button
 import record
 import sms
 import flag
-import blockdetect
+#import blockdetect
 import sound
 
 import signal
@@ -23,18 +23,18 @@ os.system("clear")
 #GPIO Initializing
 pin_button1 = 26
 pin_button2 = 19
-#pin_SW = 
+#pin_SW = 18
 pin_ultra_trg1 = 20
 pin_ultra_echo1 = 21
 pin_ultra_trg2 = 5
 pin_ultra_echo2 = 6
 pin_ultra_trg3 =23
 pin_ultra_echo3 =24
-#pin_ultra_trg3 =
-#pin_ultra_echo3 =
+pin_ultra_trg4 = 16
+pin_ultra_echo4 = 18
 pin_vib1 = 25
 pin_vib2 = 12
-#pin_vib3 =
+pin_vib3 = 4
 
 try:
     sound.start()
@@ -43,15 +43,18 @@ try:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin_button1,GPIO.IN)
     GPIO.setup(pin_button2,GPIO.IN)
-    #GPIO.setup(pin_SW, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+    #GPIO.setup(pin_SW, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(pin_ultra_trg1,GPIO.OUT)
     GPIO.setup(pin_ultra_echo1,GPIO.IN)
     GPIO.setup(pin_ultra_trg2,GPIO.OUT)
     GPIO.setup(pin_ultra_echo2,GPIO.IN)
     GPIO.setup(pin_ultra_trg3,GPIO.OUT)
     GPIO.setup(pin_ultra_echo3,GPIO.IN)
+    GPIO.setup(pin_ultra_trg4,GPIO.OUT)
+    GPIO.setup(pin_ultra_echo4,GPIO.IN)
     GPIO.setup(pin_vib1,GPIO.OUT)
     GPIO.setup(pin_vib2,GPIO.OUT)
+    GPIO.setup(pin_vib3,GPIO.OUT)
     print("GPIO SETUP Complete")
 except:
     print("GPIO SETUP ERROR")
@@ -90,17 +93,19 @@ def main(pin_button):
 try:
     print('Programm Starts')
     
-    pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2]]
-    #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,_pin_vib3],[pin_SW]]
+    #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2],pin_SW]
     #obsDet.main(pin_list)
+    #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,pin_vib3],pin_SW]
+    pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,pin_vib3]]
+    obsDet.main(pin_list)
     #t1= Process(target = obsDet.main, args=(pin_list,))
-    t2 = Process(target = main,args=(pin_button1,))
+    #t2 = Process(target = main,args=(pin_button1,))
     #t3 = Process(target = record.recording,args=())
     #t1.start()
-    t2.start()
+    #t2.start()
     #t3.start()
     #t1.join()
-    t2.join()
+    #t2.join()
     #t3.join()
     
 finally:

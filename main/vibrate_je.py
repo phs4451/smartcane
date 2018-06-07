@@ -3,19 +3,8 @@
 import RPi.GPIO as GPIO      
 import time
 import math
-
-def setup(VIB1,VIB2):
-    pwm_vib1 = GPIO.PWM(VIB1, 1000)
-    #pwm_vib1.start(0)
-    pwm_vib2 = GPIO.PWM(VIB2, 1000)
-    #pwm_vib2.start(0)
-    
-def clean_GPIO():
-    pwm_vib1.stop()
-    pwm_vib2.stop()
-    GPIO.cleanup()
  
-def vibrate1(pin_vib3):
+def vibrate_top(pin_vib3):
     pwm_vib3 =GPIO.PWM(pin_vib3,1000)
     pwm_vib3.start(0)
     
@@ -38,13 +27,12 @@ def vibrate1(pin_vib3):
         pwm_vib3.stop()
         print('vibrate stop')
     
-def vibrate2(index,distance, pin_vib1, pin_vib2):
+def vibrate_bottom(index,pin_vib1, pin_vib2):
     time.sleep(0.05)
     pwm_vib1 = GPIO.PWM(pin_vib1, 1000)
     pwm_vib2 = GPIO.PWM(pin_vib2, 1000)
     pwm_vib1.start(0)
     pwm_vib2.start(0)
-    #High = 50*math.cos(distance)+50
     High = 100
     timeterm = 0.3
     
@@ -69,8 +57,6 @@ def vibrate2(index,distance, pin_vib1, pin_vib2):
     finally:
         pwm_vib1.stop()
         pwm_vib2.stop()
-        print('vibrate stop')
-
         
 if __name__ == '__main__':
    main()
