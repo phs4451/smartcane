@@ -23,8 +23,8 @@ def main(pin_list):
         #s2 = getDistance(pin_list[1][0],pin_list[1][1],pin_list[3][0],pin_list[3][1],2)
         #s3 = getDistance(pin_list[2][0],pin_list[2][1],pin_list[3][0],pin_list[3][1],3)
         #print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3))
-        s1 = getDistance(pin_list[0][0],pin_list[0][1],1)
-        s2 = getDistance(pin_list[1][0],pin_list[1][1],2)
+        s1 = getDistance(pin_list[0][0],pin_list[0][1],2)
+        s2 = getDistance(pin_list[1][0],pin_list[1][1],1)
         s3 = getDistance(pin_list[2][0],pin_list[2][1],3)
         s4 = getDistance(pin_list[3][0],pin_list[3][1],4)
         print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3)+"\tSensor4: "+str(s4))
@@ -62,7 +62,7 @@ def main(pin_list):
 def moving_average(a,n=3):
     ret = np.cumsum(a, dtype=float)
     ret[n:] = ret[n:]-ret[:-n]
-    return ret[n-1:]/n
+    return ret[n-1:]//n
     
     
 def distCheck(dist, pin_vib3):

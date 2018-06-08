@@ -13,6 +13,7 @@ def vibrate_top(pin_vib3):
     High = 100
     timeterm1 = 0.5
     timeterm2 = 0.25
+    
     try:
         while True:
             pwm_vib3.start(High)
@@ -39,15 +40,15 @@ def vibrate_bottom(index, pin_vib1, pin_vib2):
     try:
         if index == 1:
             pwm_vib1.start(High)
-            time.sleep(timeterm)
-            pwm_vib1.stop()
-            return
-        elif index == 2:
-            pwm_vib1.start(High)
             pwm_vib2.start(High)
             time.sleep(timeterm)
             pwm_vib1.stop()
             pwm_vib2.stop()
+            return
+        elif index == 2:
+            pwm_vib1.start(High)
+            time.sleep(timeterm)
+            pwm_vib1.stop()
             return
         elif index == 3:
             pwm_vib2.start(High)

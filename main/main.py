@@ -97,14 +97,14 @@ try:
     #obsDet.main(pin_list)
     #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,pin_vib3],pin_SW]
     pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,pin_vib3]]
-    obsDet.main(pin_list)
-    #t1= Process(target = obsDet.main, args=(pin_list,))
+    #obsDet.main(pin_list)
+    t1= Process(target = obsDet.main, args=(pin_list,))
     #t2 = Process(target = main,args=(pin_button1,))
     #t3 = Process(target = record.recording,args=())
-    #t1.start()
+    t1.start()
     #t2.start()
     #t3.start()
-    #t1.join()
+    t1.join()
     #t2.join()
     #t3.join()
     

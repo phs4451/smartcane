@@ -15,10 +15,29 @@ dirname = './block_result'
 if not os.path.exists(dirname):
     os.makedirs(dirname)
 
-target = os.path.join(dirname,"white12.jpg")
+target = os.path.join(dirname,"white17.jpg")  #white4, white16,  white17, white18, white19
 
 rectangles = [] 
 cnt = 0
+
+width = 800
+height = 600
+
+def avgHSV(img_v):
+    
+    c_img_v = img_v.tolist()
+    
+    sum = 0
+    avg = 0
+    
+    for i in range(height):
+        for j in range(width):
+            sum = sum + c_img_v[i][j]
+            
+    avg = sum / (width*height)
+            
+    return avg
+    
    
 def order_points(pts):
     coords = np.zeros((4,2), dtype = "float32")
@@ -44,19 +63,19 @@ def detect(c,img):
         
         peri = cv2.arcLength(c,True)
         
-        approx = cv2.approxPolyDP(c, 0.0044*peri, True) # smooth edge
+        approx = cv2.approxPolyDP(c, 0.01*peri, True) # smooth edge
         area = cv2.contourArea(c)
         
-        if (len(approx)==4 ) and area >= 500:            
+        if (len(approx)==4 ) and area >= 1050:            
             cv2.drawContours(img, [approx],  -1, (0, 0, 255), 2)
             temp_approx = approx.reshape(len(approx),2)
             print(area, approx)
             rect = order_points(temp_approx)
-            if rect[0][0] != 0 and rect[1][0] !=0 and rect[2][0]!=0 and rect[3][0] != 0:
-                rectangles.append((area,rect))
-        elif area>260:
+            #if rect[0][0] != 0 and rect[1][0] !=0 and rect[2][0]!=0 and rect[3][0] != 0:
+            rectangles.append((area,rect))
+        #elif area>260:
             #cv2.drawContours(img, [approx],  -1, (0, 0, 255), 2)
-            print( "Not block" )
+            #print( "Not block" )
 def linear_reg(x_data,y_data):
     x_data =np.array(x_data)
     y_data =np.array(y_data)
@@ -88,19 +107,23 @@ def main():
     camera.close()
     
     img = cv2.imread(target)
-    #img = cv2.resize(img, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_AREA)
+    img = cv2.resize(img, (width,height), interpolation=cv2.INTER_AREA)
     blur = cv2.GaussianBlur(img,(3,3),0)
     blurfilename = os.path.join(dirname,'blur.jpg')
     cv2.imwrite(blurfilename,blur)
     frame = cv2.imread(blurfilename)
     
+
     #hsv??
     img_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)  
 
     img_h, img_s, img_v = cv2.split(img_hsv)
     
+    avgValue = int(avgHSV(img_v))
+    print('평균 명도 : '+str(avgValue))  
     #??? ?? ??
-    lower_white = np.array([0,0,230])
+
+    lower_white = np.array([0,0,avgValue+40])
     upper_white = np.array([180,20,255]) 
     
     mask = cv2.inRange(img_hsv, lower_white, upper_white)
@@ -112,13 +135,22 @@ def main():
             
     img = cv2.imread(img_yellow_name)
     imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    #팽창
+    kernel = np.ones((5, 5), np.uint8)
+    dilation = cv2.dilate(imgray, kernel, iterations=1)
+    
+    #opening
+    kernel = np.ones((8, 8), np.uint8)
+    opening = cv2.morphologyEx(dilation, cv2.MORPH_OPEN,kernel)
 
     #Thresholding
-    ret, thr = cv2.threshold(imgray, 20, 255, 0)
+    ret, thr = cv2.threshold(opening, 20, 255, 0)
 
-    _, contours, _ = cv2.findContours(thr, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.imshow('hhhhh',thr)
+
+    _, contours, _ = cv2.findContours(thr, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
-    #thr = cv2.adaptiveThreshold(frame,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,15,2)
 
     for con in contours:
         detect(con,img)
@@ -132,7 +164,7 @@ def main():
     img1_name = os.path.join(target)
     img2_name = os.path.join(dirname,'detectimg.jpg')
     img_original =cv2.imread(img1_name)
-    #img_original = cv2.resize(img_original, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_AREA)
+    img_original = cv2.resize(img_original,(width,height) , interpolation=cv2.INTER_AREA)
     img_detect =cv2.imread(img2_name)
     x_list=[]
     y_list=[]
@@ -142,17 +174,20 @@ def main():
         ##rect is composed of size of rectangle(index 0) and 4 coords(index 2)
         for j in range(len(rect[1])):
             cv2.putText(img_detect,str(j),(rect[1][j][0],rect[1][j][1]),cv2.FONT_HERSHEY_SCRIPT_SIMPLEX,1,(0,255,255))
-        if rect[1][0][0]!=0:
-                x_list.append(rect[1][0][0])
-                y_list.append(rect[1][0][1])
-                x2_list.append(rect[1][2][0])
-                y2_list.append(rect[1][2][1])
+        #if rect[1][0][0]!=0:
+        x_list.append(rect[1][0][0])
+        y_list.append(rect[1][0][1])
+        x2_list.append(rect[1][2][0])
+        y2_list.append(rect[1][2][1])
     if len(x_list) != 0:
+        gradient1=0;intercept1=0
+        gradient2=0;intercept2=0
         gradient1, intercept1 = linear_reg(x_list,y_list)
         img_detect = draw_line(img_detect,gradient1,intercept1)
         gradient2, intercept2 = linear_reg(x2_list,y2_list)
         img_detect = draw_line(img_detect,gradient2,intercept2)
         print(gradient1,gradient2)
+        
         if gradient1 >0 and gradient2>0:
             print("Right side")
         elif gradient1 <0 and gradient2>0:
