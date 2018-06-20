@@ -1,15 +1,15 @@
 import os
 
-flag_name = "/home/pi/Desktop/smartcane/blackbox/flag.txt"
-
-def initFlag(filename=flag_name):
-    if os.path.exists(filename):
-        os.remove(filename)
-    f = open(filename,"w")
+camera = "/home/pi/Desktop/smartcane/blackbox/flag_camera.txt"
+vibrate = "/home/pi/Desktop/smartcane/blackbox/flag_vibrate.txt"
+def initFlag(flagfile):
+    if os.path.exists(flagfile):
+        os.remove(flagfile)        
+    f = open(flagfile,"w")
     f.write(str(1))
     f.close()
 
-def setFlag(flag,filename=flag_name):
+def setFlag(flag,filename):
     if os.path.exists(filename):
         try:
             f = open(filename,"w")
@@ -20,10 +20,10 @@ def setFlag(flag,filename=flag_name):
     else:
         print("no flag file exists")
 
-def getFlag(filename=flag_name):
+def getFlag(filename):
     if os.path.exists(filename):
         try:
-            f = open(flag_name,"r")
+            f = open(filename,"r")
             flag = f.readline()
             return flag
         except:

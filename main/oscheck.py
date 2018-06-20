@@ -1,7 +1,7 @@
 import os
 
 dirname = '/home/pi/Desktop/smartcane/blackbox/record'
-max_size = pow(2,1)
+max_size = pow(2,9)*2
 
 def dir_exist():
 	if not os.exists(dirname):
@@ -14,8 +14,8 @@ def getDirSize(dirname):
 
 	for file_name in files:
 		filename = os.path.join(dirname,file_name)
-		file_time = int(file_name.split('.mp4')[0],base=10)
-		print(file_time)
+		file_time = int(file_name.split('.h264')[0],base=10)
+		#print(file_time)
 		if os.path.isfile(filename):
 			temp = os.path.getsize(filename)
 			size += temp
@@ -24,6 +24,6 @@ def getDirSize(dirname):
 	
 	if size > max_size:
 		old_file = min(file_time_list)
-		file_name =os.path.join(dirname,str(old_file)+'.mp4')
+		file_name =os.path.join(dirname,str(old_file)+'.h264')
 		os.remove(file_name)
 

@@ -6,6 +6,7 @@ import sys
 import signal
 import numpy as np
 import vibrate
+import flag
 
 MAX_DISTANCE_CM = 300
 MAX_DURATION_TIMEOUT = (MAX_DISTANCE_CM * 2 * 29.1) #17460 # 17460us = 300cm
@@ -29,18 +30,19 @@ def main(pin_list):
         s4 = getDistance(pin_list[3][0],pin_list[3][1],4)
         print("Sensor1: "+str(s1)+"\tSensor2: "+str(s2)+"\tSensor3: "+str(s3)+"\tSensor4: "+str(s4))
         
-        for i,dist in enumerate(dist_check):
-            if len(dist)>=10 and i < 3 :
-                temp  = []
-                temp = moving_average(dist)
-                    
-                if temp[-1] <= detect_threshold:
-                    print(i+1,temp[-1],len(dist))
-                    vibrate.vibrate_bottom(i+1,pin_list[4][0],pin_list[4][1])
-                    break
+        if flag.getFlag(flag.vibrate)=='1':
+            for i,dist in enumerate(dist_check):
+                if len(dist)>=10 and i < 3 :
+                    temp  = []
+                    temp = moving_average(dist)
                         
-            elif len(dist)>=10 and i==3  :
-                distCheck(dist, pin_list[4][2])
+                    if temp[-1] <= detect_threshold:
+                        print(i+1,temp[-1],len(dist))
+                        vibrate.vibrate_bottom(i+1,pin_list[4][0],pin_list[4][1])
+                        break
+                            
+                elif len(dist)>=10 and i==3  :
+                    distCheck(dist, pin_list[4][2])
         '''
         #switch_on = not GPIO.input(pin_list[4])
         #switch_on = not GPIO.input(pin_list[5])

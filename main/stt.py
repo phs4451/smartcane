@@ -2,12 +2,16 @@
 import gspeech
 import time
 import string
+import tts
+import os
 
 def main():
     i=0
+    os.system("mplayer voicefile/enterstt.mp3")
     gsp = gspeech.Gspeech()
     while True:
         stt = gsp.getText()
+
         if stt is None:
             break
         print(stt)
@@ -29,10 +33,15 @@ def main():
                 sms_file.write(lines[i])
                 i+=1       
             
+            gsp.pauseMic()
             sms_file.close()
+            ttsText = stt + ' 로 설정되었습니다 '
+            tts.tts_Clova(text = ttsText)
             
             break
         else:
+            gsp.pauseMic()
+            os.system("mplayer voicefile/wrong.mp3")
             break
         
         if ('종료' in stt):

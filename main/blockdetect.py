@@ -10,12 +10,15 @@ import os
 import numpy as np
 from scipy import stats
 from matplotlib import pyplot as plt
+import time
+import math
+import tts
 
 dirname = './block_result'
 if not os.path.exists(dirname):
     os.makedirs(dirname)
 
-target = os.path.join(dirname,"white17.jpg")  #white4, white16,  white17, white18, white19
+target = os.path.join(dirname,"represent1.jpg")  #white4, white16,  white17, white18, white19
 
 rectangles = [] 
 cnt = 0
@@ -23,6 +26,27 @@ cnt = 0
 width = 800
 height = 600
 
+def getDirection(degree):
+    if degree < 0:
+        degree = 90 + degree
+        if  0 <= degree < 10:
+            return  "12"
+        elif 15 <= degree <= 45:
+            return "13"
+        elif 45 < degree <= 90:
+            return "14"
+    else:
+        degree = 90 - degree
+        if  0 <= degree < 10:
+            return "12"
+        elif 15 <= degree <= 45:
+            return "11"
+        elif 45 < degree <= 90:
+            return  "10"
+    
+
+
+    
 def avgHSV(img_v):
     
     c_img_v = img_v.tolist()
@@ -67,9 +91,9 @@ def detect(c,img):
         area = cv2.contourArea(c)
         
         if (len(approx)==4 ) and area >= 1050:            
-            cv2.drawContours(img, [approx],  -1, (0, 0, 255), 2)
+            cv2.drawContours(img, [approx],  -1, (0, 0, 255), 3)
             temp_approx = approx.reshape(len(approx),2)
-            print(area, approx)
+            #print(area, approx)
             rect = order_points(temp_approx)
             #if rect[0][0] != 0 and rect[1][0] !=0 and rect[2][0]!=0 and rect[3][0] != 0:
             rectangles.append((area,rect))
@@ -84,13 +108,19 @@ def linear_reg(x_data,y_data):
     intercept=round(intercept,2)
     return gradient,intercept
     
-def draw_line(img,gradient,intercept):
+def draw_line(img,gradient,intercept,index):
+    if index==1:
+        color = (255,0,0)
+    elif index==2: 
+        color = (0,255,0)
+    elif index==3:
+        color =(0,0,255)
     height,width,channel = img.shape
     y1=0
     x1=((y1-intercept)/gradient).astype(int)
     y2=height
     x2=((y2-intercept)/gradient).astype(int)
-    cv2.line(img,(x1,y1),(x2,y2),(255,0,0),3)
+    cv2.line(img,(x1,y1),(x2,y2),color,3)
     return img
 
 #main
@@ -99,8 +129,8 @@ def main():
     camera = picamera.PiCamera()
     camera.vflip=True
     camera.hflip=True
+    os.system("mplayer voicefile/camera.mp3")
     capture = PiRGBArray(camera)
-    
     camera.capture(capture,format='rgb',use_video_port=True)
     capture = Image.fromarray(capture.array)
     capture.save(imgname)
@@ -120,10 +150,10 @@ def main():
     img_h, img_s, img_v = cv2.split(img_hsv)
     
     avgValue = int(avgHSV(img_v))
-    print('평균 명도 : '+str(avgValue))  
+
     #??? ?? ??
 
-    lower_white = np.array([0,0,avgValue+40])
+    lower_white = np.array([0,0,avgValue+45])
     upper_white = np.array([180,20,255]) 
     
     mask = cv2.inRange(img_hsv, lower_white, upper_white)
@@ -136,18 +166,18 @@ def main():
     img = cv2.imread(img_yellow_name)
     imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
-    #팽창
-    kernel = np.ones((5, 5), np.uint8)
+    #dilation
+    kernel = np.ones((6, 6), np.uint8)
     dilation = cv2.dilate(imgray, kernel, iterations=1)
-    
+ 
     #opening
-    kernel = np.ones((8, 8), np.uint8)
+    kernel = np.ones((7, 7), np.uint8)
     opening = cv2.morphologyEx(dilation, cv2.MORPH_OPEN,kernel)
 
     #Thresholding
     ret, thr = cv2.threshold(opening, 20, 255, 0)
-
-    cv2.imshow('hhhhh',thr)
+    
+    cv2.imshow('dddd',thr)
 
     _, contours, _ = cv2.findContours(thr, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
@@ -173,32 +203,67 @@ def main():
     for i,rect in enumerate(rectangle_sorted):
         ##rect is composed of size of rectangle(index 0) and 4 coords(index 2)
         for j in range(len(rect[1])):
-            cv2.putText(img_detect,str(j),(rect[1][j][0],rect[1][j][1]),cv2.FONT_HERSHEY_SCRIPT_SIMPLEX,1,(0,255,255))
-        #if rect[1][0][0]!=0:
-        x_list.append(rect[1][0][0])
-        y_list.append(rect[1][0][1])
-        x2_list.append(rect[1][2][0])
-        y2_list.append(rect[1][2][1])
+            cv2.putText(img_detect,str(j),(rect[1][j][0],rect[1][j][1]),cv2.FONT_HERSHEY_SCRIPT_SIMPLEX,1,(255,255,255))
+        if rect[1][0][0]!=0:
+            x_list.append(rect[1][0][0])
+            y_list.append(rect[1][0][1])
+            x2_list.append(rect[1][2][0])
+            y2_list.append(rect[1][2][1])
+        else:
+            x_list.append(rect[1][0][0])
+            y_list.append(rect[1][0][1])
+            x2_list.append(rect[1][2][0])
+            y2_list.append(rect[1][2][1])
+    
+        
     if len(x_list) != 0:
         gradient1=0;intercept1=0
         gradient2=0;intercept2=0
-        gradient1, intercept1 = linear_reg(x_list,y_list)
-        img_detect = draw_line(img_detect,gradient1,intercept1)
-        gradient2, intercept2 = linear_reg(x2_list,y2_list)
-        img_detect = draw_line(img_detect,gradient2,intercept2)
-        print(gradient1,gradient2)
         
-        if gradient1 >0 and gradient2>0:
-            print("Right side")
-        elif gradient1 <0 and gradient2>0:
-            print("Center")
-        elif gradient1 <0 and gradient2<0:
-            print("Left side")
+        gradient1, intercept1 = linear_reg(x_list,y_list)
+        gradient2, intercept2 = linear_reg(x2_list,y2_list)
+        
+        x_intersect = (intercept2-intercept1)/(gradient1-gradient2)
+        y_interscet = x_intersect*gradient1+intercept1
+        y_mid = 500
+        x_mid = y_mid*(gradient1+gradient2)-(intercept1*gradient2) - (gradient1*intercept2)
+        x_mid /=2*gradient1*gradient2
+        
+        x_third = [x_intersect,x_mid]
+        y_third = [y_interscet,y_mid]
+        gradient3,intercept3 = linear_reg(x_third,y_third)
+        
+        if not np.isnan(gradient1):
+            if not np.isnan(gradient2):
+                img_detect = draw_line(img_detect,gradient1,intercept1,1)
+                img_detect = draw_line(img_detect,gradient2,intercept2,2)
+                img_detect = draw_line(img_detect,gradient3,intercept3,3)
+                print(gradient1,gradient2)
+        if not np.isnan(gradient3):
+            degree = int(math.degrees(math.atan(gradient3)))
+        
+        direction_result = "mplayer voicefile/"+getDirection(degree)+"_clockwise.mp3"
+        os.system(direction_result)
+        
+        print(direction_result)
+        
+    
+        #if gradient1 >0 and gradient2>0:
+            #print("Left side")
+            #os.system("mplayer voicefile/left.mp3")
+        #elif gradient1 <0 and gradient2>0:
+            #print("Center")
+            #os.system("mplayer voicefile/front.mp3")
+        #elif gradient1 <0 and gradient2<0:
+            #print("Right side")
+            #os.system("mplayer voicefile/right.mp3")
     else:
         print("NO CROSSWALK")
-    
+        os.system("mplayer voicefile/nodetect.mp3")
+
     cv2.imshow('original',img_original)
     cv2.imshow('detect',img_detect)
+    cv2.imwrite('detectimg.jpg',img_detect)
     cv2.waitKey(0)
     cv2.destroyAllWindows() 
 

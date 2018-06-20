@@ -4,11 +4,10 @@ import obstacleDetect as obsDet
 import objectRecognition as objRec
 import button
 import record
-import sms
 import flag
-#import blockdetect
+import blockdetect
 import sound
-
+import stt
 import signal
 import sys
 import os
@@ -16,12 +15,12 @@ import time
 import RPi.GPIO as GPIO
 from multiprocessing import Process
 
-os.system("sudo rdate -s time.bora.net")
+#os.system("sudo rdate -s time.bora.net")
 GPIO.cleanup()
 os.system("clear")
 
 #GPIO Initializing
-pin_button1 = 26
+pin_button1 = 13
 pin_button2 = 19
 #pin_SW = 18
 pin_ultra_trg1 = 20
@@ -29,16 +28,19 @@ pin_ultra_echo1 = 21
 pin_ultra_trg2 = 5
 pin_ultra_echo2 = 6
 pin_ultra_trg3 =23
+
 pin_ultra_echo3 =24
-pin_ultra_trg4 = 16
-pin_ultra_echo4 = 18
-pin_vib1 = 25
-pin_vib2 = 12
-pin_vib3 = 4
+pin_ultra_trg4 = 17
+pin_ultra_echo4 = 27
+pin_vib1 = 16
+pin_vib2 = 25
+pin_vib3 = 12
 
 try:
     sound.start()
-    flag.initFlag()
+    flag.initFlag(flag.camera)
+    flag.initFlag(flag.vibrate)
+    
     print("Setting up GPIO...")
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin_button1,GPIO.IN)
@@ -59,54 +61,76 @@ try:
 except:
     print("GPIO SETUP ERROR")
 
-def main(pin_button):
+def button1(pin_button):
+    
     while(True):
         print('button')
         count= button.main(pin_button)
         
         if count == 1:
             print(str(pin_button)+" once")
-            #sound.camera()
-            #flag.setFlag(0)
-            #time.sleep(0.15)
-            #objRec.main()
-            #flag.setFlag(1)
+            flag.setFlag(0,flag.camera)
+            time.sleep(0.15)
+            objRec.main()
+            flag.setFlag(1,flag.camera)
             
         elif count == 2:
             print(str(pin_button)+" twice")
-            flag.setFlag(0)
+            flag.setFlag(0,flag.camera)
             time.sleep(0.15)
-            sound.camera()
             blockdetect.main()
-            flag.setFlag(1)
+            flag.setFlag(1,flag.camera)
             
         elif count >= 3:
+            import sms
             print(str(pin_button)+" long_press")
-            flag.setFlag(0)
+            flag.setFlag(0,flag.camera)
             time.sleep(0.15)
-            #sound.mms()
             sms.main()
-            flag.setFlag(1)
-            #obsDet.main(pin_ultra_trg1,pin_ultra_echo1,pin_vib1)
-        time.sleep(0.05)  
+            flag.setFlag(1,flag.camera)
+            
+        time.sleep(0.05)
         
+def button2(pin_button):
+    
+    while(True):
+        print('button')
+        count= button.main(pin_button)
+        
+        if count == 1:
+            vib_flag = flag.getFlag(flag.vibrate)
+            if vib_flag == '1':
+                os.system('mplayer voicefile/vibrateoff.mp3')
+                print("vibrate off")
+                flag.setFlag(0,flag.vibrate)
+            elif vib_flag == '0':
+                os.system('mplayer voicefile/vibrateon.mp3')
+                print("vibrate on")
+                flag.setFlag(1,flag.vibrate)
+                
+        elif count >= 3:
+            stt.main()
+
+        time.sleep(0.05)
+                
 try:
     print('Programm Starts')
-    
     #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_vib1,pin_vib2],pin_SW]
     #obsDet.main(pin_list)
     #pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,pin_vib3],pin_SW]
     pin_list = [[pin_ultra_trg1,pin_ultra_echo1],[pin_ultra_trg2,pin_ultra_echo2],[pin_ultra_trg3,pin_ultra_echo3],[pin_ultra_trg4,pin_ultra_echo4],[pin_vib1,pin_vib2,pin_vib3]]
-    #obsDet.main(pin_list)
+    
     t1= Process(target = obsDet.main, args=(pin_list,))
-    #t2 = Process(target = main,args=(pin_button1,))
-    #t3 = Process(target = record.recording,args=())
+    t2 = Process(target = button1,args=(pin_button1,))
+    t3 = Process(target = record.recording,args=())
     t1.start()
-    #t2.start()
-    #t3.start()
+    t2.start()
+    t3.start()
+    button2(pin_button2)
+    
     t1.join()
-    #t2.join()
-    #t3.join()
+    t2.join()
+    t3.join()
     
 finally:
     sound.finish()

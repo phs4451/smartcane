@@ -34,8 +34,8 @@ def main():
     camera = picamera.PiCamera()
     camera.vflip=True
     camera.hflip=True
-    rawCapture = PiRGBArray(camera)
     os.system("mplayer voicefile/camera.mp3")
+    rawCapture = PiRGBArray(camera)
     camera.capture(rawCapture,format='rgb',use_video_port=True)
     capture = Image.fromarray(rawCapture.array)
     rawCapture.truncate(0)
@@ -55,7 +55,6 @@ def make_sentence(items):
         name_list.append(line.split('#'))
     name_file.close()
     
-    #items = 'chair,5#person,2,#cup,5'
     items = items.split('#')
     items_split = []
     for item in items:
