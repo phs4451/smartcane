@@ -1,6 +1,6 @@
-import blockdetect
-blockdetect.main()
+#import blockdetect
+#blockdetect.main()
 
-#import stt
+import stt
 
-#stt.main()
+stt.main()

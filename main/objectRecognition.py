@@ -16,17 +16,18 @@ def encode_img(img):
 	return encoded_img.decode()
 
 def send_img(img,ip):
-	data = {'image':img}
-	Jsondata = json.dumps(data)
-	response = requests.post(ip,Jsondata)
-	result = response.content.decode('utf-8').split('\r\n')
-	temp =json.loads(result[5])
-	sentence = ''
-	if(temp['result'] is not ''):
-		sentence = make_sentence(temp['result'])
-		tts.tts_Clova(text = sentence)
-	else:
-		print('parsing error')
+    data = {'image':img}
+    Jsondata = json.dumps(data)
+    response = requests.post(ip,Jsondata)
+    result = response.content.decode('utf-8').split('\r\n')
+    temp =json.loads(result[5])
+    sentence = ''
+    if(temp['result'] != 'nothing'):
+        sentence = make_sentence(temp['result'])
+        tts.tts_Clova(text = sentence)
+    else:
+        os.system('mplayer  voicefile/noobjectfound.mp3')
+        print('parsing error')
 
 def main():
     server_ip = 'http://210.94.185.47:30010'

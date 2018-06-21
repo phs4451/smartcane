@@ -1,7 +1,7 @@
 import os
 
-camera = "/home/pi/Desktop/smartcane/blackbox/flag_camera.txt"
-vibrate = "/home/pi/Desktop/smartcane/blackbox/flag_vibrate.txt"
+camera = "flags/flag_camera.txt"
+vibrate = "flags/flag_vibrate.txt"
 def initFlag(flagfile):
     if os.path.exists(flagfile):
         os.remove(flagfile)        
