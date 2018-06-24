@@ -19,6 +19,7 @@
 
 ### SOS 요청
 STT를 이용하여 보호자의 전화번호를 음성으로 입력받는다. 사용자가 SOS 버튼을 누르면 그 순간의 전방 사진과 사용자의 위치를 안내하는 Google map URL을 보호자에게 MMS로 전송한다.
+
 ![sos](https://user-images.githubusercontent.com/33053367/41817593-2ae3b8d0-77d9-11e8-9d52-63bb911505cd.png)
 
 ### 장애물 인식
