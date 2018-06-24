@@ -11,8 +11,7 @@
 
 ### 횡단보도 방향 안내
 촬영한 사진에서 HSV변환을 통해 횡단보도의 꼭짓점을 인식하고, 선형회귀를 적용해 횡단보도가 어느 방향으로 기울어 있는지 확인한다. 인식 결과를 사용자에게 음성으로 전달해 올바른 방향으로 인도한다.
-![1](https://user-images.githubusercontent.com/33053367/41817596-2b7c64a4-77d9-11e8-8449-4e4c6b90ab83.jpg)
-![2](https://user-images.githubusercontent.com/33053367/41817597-2bae3f92-77d9-11e8-9077-f130a1b738ac.jpg)
+![1](https://user-images.githubusercontent.com/33053367/41817596-2b7c64a4-77d9-11e8-8449-4e4c6b90ab83.jpg) ![2](https://user-images.githubusercontent.com/33053367/41817597-2bae3f92-77d9-11e8-9077-f130a1b738ac.jpg)
 
 ### 블랙박스
 라즈베리파이의 전원이 켜진 순간부터 전원이 꺼질 때까지 블랙박스 촬영을 유지한다. 
