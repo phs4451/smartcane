@@ -20,8 +20,6 @@
 ### SOS 요청
 STT를 이용하여 보호자의 전화번호를 음성으로 입력받는다. 사용자가 SOS 버튼을 누르면 그 순간의 전방 사진과 사용자의 위치를 안내하는 Google map URL을 보호자에게 MMS로 전송한다.
 
-![sos](https://user-images.githubusercontent.com/33053367/41817593-2ae3b8d0-77d9-11e8-9d52-63bb911505cd.png)
-
 ### 장애물 인식
 지속적으로 전방의 장애물까지의 거리를 측정하고, 이동평균필터를 통해 이상값을 제거한다. 상단의 초음파 센서 1개는 빠르게 다가오는 물체를 인식하고, 하단의 초음파 센서 3개는 일정 거리 이하의 장애물을 인식하여 진동 모터로 사용자에게 알림을 전달한다.
 ![obstacledetection](https://user-images.githubusercontent.com/33053367/41817608-7fb8c512-77d9-11e8-892b-2763eb55721b.JPG)
